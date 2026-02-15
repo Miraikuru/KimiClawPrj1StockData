@@ -1,0 +1,222 @@
+# Nyaron - The Feline Kin
+# 喵灵 - 来自闪耀科技世界的基因改造生物
+
+nyaron = {
+	# 基础属性
+	category = physical
+	
+	# 遗传特性
+	genetic = yes
+	inherit_chance = 100
+	parent_inheritance_sex = all
+	child_inheritance_sex = all
+	
+	# 生育周期比人类短
+	fertility = 0.15
+	
+	# 属性修正
+	attraction_opinion = 15
+	opinion_of_same_trait = 10
+	
+	# 能力修正（学习能力弱，但其他能力强）
+	martial = 2
+	prowess = 3
+	diplomacy = 1
+	intrigue = -1
+	stewardship = -2
+	learning = -3
+	
+	# 健康相关
+	health = 0.5
+	
+	#  stress相关
+	stress_gain_mult = -0.1
+	
+	# 遗传给后代的规则
+	genetic_constraint_all = {
+		has_trait = nyaron
+	}
+	
+	# 触发条件 - 只有特定角色可以获得
+	potential = {
+		OR = {
+			has_trait = nyaron
+			has_character_flag = is_nyaron
+			AND = {
+				exists = father
+				father = { has_trait = nyaron }
+			}
+			AND = {
+				exists = mother
+				mother = { has_trait = nyaron }
+			}
+		}
+	}
+	
+	# 兼容性 - 与其他特性的互动
+	compatibility = {
+		beauty_good_1 = 10
+		beauty_good_2 = 15
+		beauty_good_3 = 20
+		intellect_bad_1 = -5
+		intellect_bad_2 = -10
+		intellect_bad_3 = -15
+		strong = 10
+		shrewd = -10
+		giant = 5
+		dwarf = -10
+	}
+	
+	# 文化相关
+	culture_modifier = {
+		parameter = nyaron_culture_acceptance
+		value = 20
+	}
+	
+	# 宗教相关
+	faith_modifier = {
+		parameter = nyaron_acceptance
+		value = -10
+	}
+	
+	# 指挥官修正
+	commander_modifier = {
+		damage = 5
+		toughness = 3
+		pursuit = 8
+		screen = 5
+	}
+	
+	# 视觉效果
+	icon = nyaron_trait_icon
+	
+	# 描述
+	desc = nyaron_desc
+	
+	# 遗传组
+	group_equivalence = nyaron_group
+}
+
+# 第一代喵灵（始祖）- 只有第一个喵灵拥有
+nyaron_progenitor = {
+	category = fame
+	
+	# 属性修正（比后代更强）
+	martial = 4
+	prowess = 5
+	diplomacy = 2
+	intrigue = -1
+	stewardship = -1
+	learning = -4
+	
+	# 吸引力
+	attraction_opinion = 25
+	
+	# 生育
+	fertility = 0.25
+	
+	# 健康
+	health = 1.0
+	
+	# 特殊修正
+	monthly_prestige = 0.5
+	monthly_dynasty_prestige = 1.0
+	
+	# 触发条件
+	potential = {
+		has_character_flag = nyaron_first_progenitor
+	}
+	
+	# 不可遗传
+	inherit_chance = 0
+	
+	icon = nyaron_progenitor_icon
+	desc = nyaron_progenitor_desc
+}
+
+# 喵灵纯血 - 父母都是喵灵时可能获得
+nyaron_pureblood = {
+	category = physical
+	genetic = yes
+	inherit_chance = 50
+	
+	# 属性修正（纯血更强）
+	martial = 3
+	prowess = 4
+	diplomacy = 2
+	stewardship = -1
+	learning = -2
+	
+	# 生育优势
+	fertility = 0.2
+	
+	# 健康
+	health = 0.8
+	
+	# 吸引力
+	attraction_opinion = 20
+	
+	# 触发条件
+	potential = {
+		AND = {
+			has_trait = nyaron
+			exists = father
+			exists = mother
+			father = { has_trait = nyaron }
+			mother = { has_trait = nyaron }
+		}
+	}
+	
+	icon = nyaron_pureblood_icon
+	desc = nyaron_pureblood_desc
+}
+
+# 喵灵战士 - 战斗专精
+nyaron_warrior = {
+	category = commander
+	
+	# 战斗属性
+	martial = 3
+	prowess = 4
+	
+	# 指挥官修正
+	commander_modifier = {
+		damage = 10
+		toughness = 5
+		pursuit = 10
+		screen = 8
+		mountain_advantage = 5
+		forest_advantage = 8
+	}
+	
+	# 触发条件
+	potential = {
+		has_trait = nyaron
+		martial >= 12
+	}
+	
+	icon = nyaron_warrior_icon
+	desc = nyaron_warrior_desc
+}
+
+# 喵灵侍从 - 讨好人类专精
+nyaron_attendant = {
+	category = lifestyle
+	
+	# 社交属性
+	diplomacy = 3
+	intrigue = 2
+	attraction_opinion = 25
+	
+	# 宫廷相关
+	court_grandeur_baseline_add = 5
+	
+	# 触发条件
+	potential = {
+		has_trait = nyaron
+		diplomacy >= 10
+	}
+	
+	icon = nyaron_attendant_icon
+	desc = nyaron_attendant_desc
+}

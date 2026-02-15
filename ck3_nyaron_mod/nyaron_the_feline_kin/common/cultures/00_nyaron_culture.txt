@@ -1,0 +1,146 @@
+# Nyaron Culture - 喵灵文化
+# 来自闪耀科技世界的基因改造生物，意外来到古典世界
+
+nyaron_culture = {
+	# 文化基础
+	color = { 255 140 0 }  # 橙色，代表喵灵的活力
+	
+	# 语言
+	language = language_nyaron
+	
+	# 文化传承
+	heritage = heritage_nyaron
+	
+	# 文化特质
+	ethos = ethos_bellicose
+	traditions = {
+		tradition_warrior_culture
+		tradition_feline_agility
+		tradition_stellar_origins
+		tradition_genetic_memory
+	}
+	
+	# 名字列表
+	name_list = name_list_nyaron
+	
+	# 建筑偏好
+	building_gfx = { indian_building_gfx }
+	clothing_gfx = { indian_clothing_gfx }
+	unit_gfx = { indian_unit_gfx }
+	
+	# 婚姻类型
+	marriage_type = monogamous
+	
+	# 继承规则
+	succession_laws = {
+		succession_single_heir_succession_law
+	}
+	
+	# 宗教偏好
+	religion = nyaron_spirituality
+	
+	# 起始科技
+	start_with_tech = {
+		innovation_battlements
+		innovation_motte
+	}
+	
+	# 文化描述
+	desc = nyaron_culture_desc
+}
+
+# 喵灵语言
+language_nyaron = {
+	name = language_nyaron_name
+	color = { 255 140 0 }
+}
+
+# 喵灵文化传承
+heritage_nyaron = {
+	type = heritage
+	is_shown = {
+		has_culture = {
+			has_culture_tradition = tradition_stellar_origins
+		}
+	}
+}
+
+# 传统：猫科敏捷
+tradition_feline_agility = {
+	category = regional
+	
+	# 效果
+	parameters = {
+		feline_pursuit_bonus = 10
+		feline_screen_bonus = 10
+		feline_attraction_bonus = 10
+	}
+	
+	# 角色修正
+	character_modifier = {
+		prowess = 2
+		health = 0.3
+		attraction_opinion = 10
+	}
+	
+	# 军队修正
+	men_at_arms_modifier = {
+		nyaron_warriors_damage_mult = 0.1
+		nyaron_warriors_toughness_mult = 0.1
+	}
+	
+	# 触发条件
+	can_pick = {
+		has_culture_tradition = tradition_stellar_origins
+	}
+	
+	# AI权重
+	ai_will_do = {
+		value = 100
+	}
+}
+
+# 传统：星际起源
+tradition_stellar_origins = {
+	category = regional
+	
+	# 效果
+	parameters = {
+		stellar_learning_penalty = -0.2
+		stellar_martial_bonus = 0.1
+		stellar_attraction_bonus = 0.15
+	}
+	
+	# 角色修正
+	character_modifier = {
+		learning = -2
+		martial = 2
+		attraction_opinion = 15
+		different_faith_opinion = -10
+	}
+	
+	# 文化描述
+	desc = tradition_stellar_origins_desc
+}
+
+# 传统：基因记忆
+tradition_genetic_memory = {
+	category = regional
+	
+	# 效果
+	parameters = {
+		genetic_trait_inheritance_bonus = 0.2
+		genetic_prestige_bonus = 0.1
+	}
+	
+	# 角色修正
+	character_modifier = {
+		dynasty_prestige_mult = 0.2
+		fertility = 0.1
+	}
+	
+	# 触发条件
+	can_pick = {
+		has_culture_tradition = tradition_stellar_origins
+	}
+}

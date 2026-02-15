@@ -1,0 +1,144 @@
+# Nyaron Warriors - 喵灵战士
+# 基因改造的战斗特化单位
+
+nyaron_warriors = {
+	# 基础属性
+	type = nyaron_warriors
+	
+	# 购买和维护成本
+	cost = 150
+	maintenance = 1.5
+	
+	# 战斗属性
+	damage = 35
+	toughness = 25
+	pursuit = 40
+	screen = 30
+	
+	# 地形加成
+	terrain_bonus = {
+		forest = { damage = 10 pursuit = 10 }
+		mountains = { toughness = 10 screen = 10 }
+		hills = { damage = 5 toughness = 5 }
+	}
+	
+	# 克制关系
+	counters = {
+		light_cavalry = 1.5
+		archers = 1.3
+	}
+	
+	# 被克制
+	weak_against = {
+		pikemen = 1.5
+		heavy_cavalry = 1.3
+	}
+	
+	# 购买限制
+	max_manpower = 10
+	
+	# 招募条件
+	can_recruit = {
+		culture = { has_culture_tradition = tradition_stellar_origins }
+		OR = {
+			has_trait = nyaron
+			has_trait = nyaron_pureblood
+		}
+	}
+	
+	# 维护条件
+	can_maintain = {
+		OR = {
+			has_trait = nyaron
+			has_trait = nyaron_pureblood
+		}
+	}
+	
+	# 购买效果
+	on_bought = {
+		add_prestige = 50
+	}
+	
+	# 图标
+	icon = nyaron_warriors_icon
+}
+
+# 喵灵猎手 - 快速打击单位
+nyaron_hunters = {
+	type = nyaron_hunters
+	
+	cost = 120
+	maintenance = 1.2
+	
+	damage = 25
+	toughness = 15
+	pursuit = 50
+	screen = 20
+	
+	terrain_bonus = {
+		forest = { pursuit = 15 damage = 10 }
+		plains = { pursuit = 10 }
+	}
+	
+	counters = {
+		light_cavalry = 1.3
+		siege_weapons = 1.5
+	}
+	
+	weak_against = {
+		heavy_infantry = 1.5
+		pikemen = 1.3
+	}
+	
+	max_manpower = 15
+	
+	can_recruit = {
+		culture = { has_culture_tradition = tradition_stellar_origins }
+		OR = {
+			has_trait = nyaron
+			has_trait = nyaron_pureblood
+		}
+	}
+	
+	icon = nyaron_hunters_icon
+}
+
+# 喵灵守护者 - 防御特化单位
+nyaron_guardians = {
+	type = nyaron_guardians
+	
+	cost = 180
+	maintenance = 1.8
+	
+	damage = 20
+	toughness = 45
+	pursuit = 15
+	screen = 40
+	
+	terrain_bonus = {
+		mountains = { toughness = 15 screen = 15 }
+		hills = { toughness = 10 screen = 10 }
+	}
+	
+	counters = {
+		heavy_cavalry = 1.3
+		heavy_infantry = 1.2
+	}
+	
+	weak_against = {
+		archers = 1.5
+		siege_weapons = 1.3
+	}
+	
+	max_manpower = 8
+	
+	can_recruit = {
+		culture = { has_culture_tradition = tradition_stellar_origins }
+		OR = {
+			has_trait = nyaron
+			has_trait = nyaron_pureblood
+		}
+	}
+	
+	icon = nyaron_guardians_icon
+}

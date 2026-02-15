@@ -1,0 +1,321 @@
+# Nyaron Story Events - 喵灵故事事件
+# 仅当玩家主控角色为喵灵时触发
+
+namespace = nyaron_story
+
+# ============================================
+# 通用喵灵故事事件
+# ============================================
+
+# 事件：喵灵觉醒 - 角色意识到自己的特殊性质
+nyaron_story.0001 = {
+	type = character_event
+	title = nyaron_awakening_title
+	desc = nyaron_awakening_desc
+	
+	theme = stewardship
+	left_portrait = {
+		character = root
+		animation = personality_bold
+	}
+	
+	# 触发条件
+	trigger = {
+		has_trait = nyaron
+		NOT = { has_character_flag = nyaron_awakened }
+		age >= 16
+	}
+	
+	# 权重
+	weight_multiplier = {
+		base = 100
+	}
+	
+	# 立即效果
+	immediate = {
+		add_character_flag = nyaron_awakened
+	}
+	
+	# 选项1：接受自己的天性
+	option = {
+		name = nyaron_accept_nature
+		add_stress = -10
+		add_prestige = 100
+		add_trait = nyaron_warrior
+		ai_chance = {
+			base = 70
+		}
+	}
+	
+	# 选项2：尝试融入人类社会
+	option = {
+		name = nyaron_embrace_humanity
+		add_stress = 20
+		add_diplomacy_skill = 1
+		add_trait = nyaron_attendant
+		ai_chance = {
+			base = 30
+		}
+	}
+}
+
+# 事件：星之回忆 - 梦到起源星球
+nyaron_story.0002 = {
+	type = character_event
+	title = nyaron_stellar_dreams_title
+	desc = nyaron_stellar_dreams_desc
+	
+	theme = learning
+	left_portrait = {
+		character = root
+		animation = personality_calm
+	}
+	
+	trigger = {
+		has_trait = nyaron
+		has_character_flag = nyaron_awakened
+		NOT = { has_character_flag = had_stellar_dream }
+	}
+	
+	immediate = {
+		add_character_flag = had_stellar_dream
+	}
+	
+	option = {
+		name = nyaron_dream_wonder
+		add_learning_skill = 1
+		add_piety = 50
+		add_stress = -5
+	}
+	
+	option = {
+		name = nyaron_dream_fear
+		add_stress = 10
+		add_intrigue_skill = 1
+	}
+}
+
+# 事件：喵灵的狩猎本能
+nyaron_story.0003 = {
+	type = character_event
+	title = nyaron_hunting_instinct_title
+	desc = nyaron_hunting_instinct_desc
+	
+	theme = hunting
+	left_portrait = {
+		character = root
+		animation = personality_bold
+	}
+	
+	trigger = {
+		has_trait = nyaron
+		martial >= 10
+		NOT = { has_character_modifier = nyaron_hunting_high }
+	}
+	
+	immediate = {
+		add_character_modifier = {
+			modifier = nyaron_hunting_high
+			years = 5
+		}
+	}
+	
+	option = {
+		name = nyaron_hunt_prey
+		add_prowess_skill = 1
+		add_prestige = 50
+		trigger_event = {
+			id = nyaron_story.0004
+			days = 7
+		}
+	}
+	
+	option = {
+		name = nyaron_resist_instinct
+		add_stress = 15
+		add_piety = 25
+	}
+}
+
+# 事件：狩猎成功
+nyaron_story.0004 = {
+	type = character_event
+	title = nyaron_hunt_success_title
+	desc = nyaron_hunt_success_desc
+	
+	theme = hunting
+	
+	option = {
+		name = nyaron_hunt_glory
+		add_prestige = 100
+		add_trait_xp = {
+			trait = hunter_1
+			value = 50
+		}
+	}
+}
+
+# 事件：喵灵的社交困境
+nyaron_story.0005 = {
+	type = character_event
+	title = nyaron_social_struggle_title
+	desc = nyaron_social_struggle_desc
+	
+	trigger = {
+		has_trait = nyaron
+		learning < 8
+		any_courtier = {
+			NOT = { has_trait = nyaron }
+			opinion = {
+				target = root
+				value < 0
+			}
+		}
+	}
+	
+	option = {
+		name = nyaron_use_charm
+		add_diplomacy_skill = 1
+		random_courtier = {
+			limit = {
+				NOT = { has_trait = nyaron }
+				opinion = {
+					target = root
+					value < 0
+				}
+			}
+			add_opinion = {
+				modifier = nyaron_charmed
+				target = root
+			}
+		}
+	}
+	
+	option = {
+		name = nyaron_ignore_them
+		add_stress = 10
+	}
+}
+
+# ============================================
+# 始祖专属故事事件
+# ============================================
+
+# 事件：第一个喵灵的降临
+nyaron_progenitor.0001 = {
+	type = character_event
+	title = nyaron_arrival_title
+	desc = nyaron_arrival_desc
+	
+	theme = stewardship
+	left_portrait = {
+		character = root
+		animation = personality_bold
+	}
+	
+	# 仅第一个喵灵触发
+	trigger = {
+		has_character_flag = nyaron_first_progenitor
+		NOT = { has_character_flag = nyaron_arrival_triggered }
+	}
+	
+	immediate = {
+		add_character_flag = nyaron_arrival_triggered
+		add_trait = nyaron_progenitor
+	}
+	
+	option = {
+		name = nyaron_arrival_survey
+		add_prestige = 500
+		add_piety = 100
+		add_gold = 100
+		create_title = {
+			tier = county
+			landed_title = c_nyaron_landing
+		}
+		set_realm_capital = c_nyaron_landing
+		trigger_event = {
+			id = nyaron_progenitor.0002
+			days = 30
+		}
+	}
+}
+
+# 事件：建立喵灵据点
+nyaron_progenitor.0002 = {
+	type = character_event
+	title = nyaron_establish_base_title
+	desc = nyaron_establish_base_desc
+	
+	option = {
+		name = nyaron_build_sanctuary
+		add_building = nyaron_sanctuary_01
+		add_prestige = 200
+	}
+	
+	option = {
+		name = nyaron_conquer_locals
+		add_martial_skill = 2
+		start_war = {
+			cb = county_conquest_cb
+			target = neighbor_county
+		}
+	}
+}
+
+# 事件：基因记忆的传承
+nyaron_progenitor.0003 = {
+	type = character_event
+	title = nyaron_genetic_legacy_title
+	desc = nyaron_genetic_legacy_desc
+	
+	trigger = {
+		has_character_flag = nyaron_first_progenitor
+		any_child = {
+			has_trait = nyaron
+		}
+	}
+	
+	option = {
+		name = nyaron_teach_children
+		every_child = {
+			limit = { has_trait = nyaron }
+			add_martial_skill = 1
+			add_prowess_skill = 1
+		}
+		add_dynasty_prestige = 100
+	}
+}
+
+# 事件：寻找其他喵灵
+nyaron_progenitor.0004 = {
+	type = character_event
+	title = nyaron_search_others_title
+	desc = nyaron_search_others_desc
+	
+	trigger = {
+		has_character_flag = nyaron_first_progenitor
+		age >= 25
+	}
+	
+	option = {
+		name = nyaron_send_explorers
+		add_gold = -50
+		random_list = {
+			30 = {
+				create_character = {
+					template = nyaron_wanderer
+					employer = root
+				}
+			}
+			70 = {
+				add_prestige = 50
+			}
+		}
+	}
+	
+	option = {
+		name = nyaron_stay_isolated
+		add_stress = -10
+	}
+}

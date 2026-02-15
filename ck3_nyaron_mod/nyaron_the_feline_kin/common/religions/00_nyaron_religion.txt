@@ -1,0 +1,144 @@
+# Nyaron Spirituality - 喵灵精神信仰
+# 对起源星球的追忆和对新世界的适应
+
+nyaron_spirituality = {
+	# 基础信息
+	family = rf_nyaron
+	
+	# 视觉效果
+	graphical_faith = "nyaron_gfx"
+	icon = nyaron_religion_icon
+	reformed_icon = nyaron_religion_reformed_icon
+	
+	# 教义
+	doctrine = nyaron_doctrine_core
+	
+	# 圣书
+	holy_book = the_stellar_codex
+	
+	# 宗教描述
+	desc = nyaron_spirituality_desc
+	
+	# 宗教名称
+	custom_faith_names = {
+		{ name = "Stellar Remembrance" adjective = "Stellar" }
+		{ name = "Nyaron Path" adjective = "Nyaron" }
+		{ name = "Way of the Stars" adjective = "Stellar" }
+	}
+	
+	# 圣地
+	holy_sites = {
+		# 喵灵降临的地方（随机生成，这里预留位置）
+		nyaron_landing_site
+		# 重要历史地点
+		constantinople
+		jerusalem
+		rome
+		alexandria
+	}
+	
+	# 宗教特性
+	religious_head_title = "stellar_keeper"
+	religious_head_title_name = "Keeper of the Stars"
+	
+	# 宗教态度
+	doctrine_gender_clergy = doctrine_clergy_male_and_female
+	doctrine_gender_dominance = doctrine_gender_equal
+	
+	# 圣战
+	doctrine_warmonger = doctrine_warmonger_core
+	
+	# 宗教旗帜
+	coa_definitive = yes
+	
+	# 宗教颜色
+	color = { 255 140 0 }
+}
+
+# 核心教义
+doctrine_nyaron_core = {
+	group = "nyaron_group"
+	
+	# 核心信仰
+	doctrine_core_tenets = {
+		tenet_stellar_origins
+		tenet_feline_sanctity
+		tenet_adaptive_nature
+	}
+}
+
+# 信条：星际起源
+tenet_stellar_origins = {
+	icon = tenet_stellar_origins_icon
+	
+	# 效果
+	character_modifier = {
+		different_faith_opinion = -15
+		same_faith_opinion = 10
+		monthly_prestige = 0.2
+	}
+	
+	# 描述
+	desc = tenet_stellar_origins_desc
+}
+
+# 信条：猫科神圣
+tenet_feline_sanctity = {
+	icon = tenet_feline_sanctity_icon
+	
+	# 效果
+	character_modifier = {
+		attraction_opinion = 10
+		prowess = 1
+		health = 0.2
+	}
+	
+	# 特殊规则
+	parameters = {
+		feline_trait_opinion_bonus = 15
+	}
+	
+	# 描述
+	desc = tenet_feline_sanctity_desc
+}
+
+# 信条：适应性
+tenet_adaptive_nature = {
+	icon = tenet_adaptive_nature_icon
+	
+	# 效果
+	character_modifier = {
+		learning = -1
+		martial = 1
+		stress_gain_mult = -0.1
+	}
+	
+	# 文化适应
+	parameters = {
+		culture_conversion_speed = 0.2
+		accept_culture_conversion = yes
+	}
+	
+	# 描述
+	desc = tenet_adaptive_nature_desc
+}
+
+# 圣地：喵灵降临点
+nyaron_landing_site = {
+	county = c_nyaron_landing  # 需要在历史中定义
+	
+	# 圣地效果
+	character_modifier = {
+		monthly_prestige = 0.5
+		fertility = 0.1
+	}
+	
+	# 圣地描述
+	desc = nyaron_landing_site_desc
+	
+	# 圣地名称
+	name = "The Landing Site"
+	
+	# 圣地类型
+	holy_site_type = nyaron_holy_site
+}

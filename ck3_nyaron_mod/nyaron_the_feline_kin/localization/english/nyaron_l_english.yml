@@ -1,0 +1,97 @@
+﻿l_english:
+ # Traits
+ trait_nyaron:0 "Nyaron"
+ trait_nyaron_desc:0 "A genetically engineered feline-humanoid from the Stellar Tech World. The Nyaron possess superior physical capabilities and striking appearance, but struggle with complex intellectual pursuits."
+ trait_nyaron_progenitor:0 "First of the Nyaron"
+ trait_nyaron_progenitor_desc:0 "The original Nyaron who arrived on this world. Their genetic template is pure and powerful, making them the progenitor of all Nyaron kind."
+ trait_nyaron_pureblood:0 "Pureblood Nyaron"
+ trait_nyaron_pureblood_desc:0 "Born of two Nyaron parents, this individual possesses the purest expression of their genetic heritage."
+ trait_nyaron_warrior:0 "Nyaron Warrior"
+ trait_nyaron_warrior_desc:0 "A Nyaron who has embraced their combat instincts and become a formidable warrior."
+ trait_nyaron_attendant:0 "Nyaron Attendant"
+ trait_nyaron_attendant_desc:0 "A Nyaron who has learned to use their charm and appeal to serve in courts and noble households."
+
+ # Culture
+ culture_nyaron_culture:0 "Nyaron"
+ culture_nyaron_culture_desc:0 "The culture of the Nyaron, shaped by their genetic memories of the Stellar Tech World and their adaptation to this primitive planet."
+ language_nyaron_name:0 "Nyar-Speak"
+ heritage_nyaron:0 "Stellar Heritage"
+ tradition_stellar_origins:0 "Stellar Origins"
+ tradition_stellar_origins_desc:0 "This culture remembers the stars from which they came. Their genetic memory holds fragments of advanced technology and knowledge."
+ tradition_feline_agility:0 "Feline Agility"
+ tradition_feline_agility_desc:0 "The natural grace and speed of the feline form gives these warriors unmatched mobility in battle."
+ tradition_genetic_memory:0 "Genetic Memory"
+ tradition_genetic_memory_desc:0 "Knowledge and instincts passed down through bloodlines, allowing rapid adaptation and learning."
+
+ # Religion
+ nyaron_spirituality:0 "Nyaron Spirituality"
+ nyaron_spirituality_adj:0 "Nyaron"
+ nyaron_spirituality_desc:0 "A faith centered on the remembrance of the Stellar Tech World and the sanctity of the feline form. Followers believe they are destined to bring their advanced ways to this primitive world."
+ tenet_stellar_origins:0 "Stellar Origins"
+ tenet_stellar_origins_desc:0 "We came from the stars, and to the stars we shall return. Our genetic memory holds the truth of our divine origin."
+ tenet_feline_sanctity:0 "Feline Sanctity"
+ tenet_feline_sanctity_desc:0 "The feline form is sacred, perfected by the scientists of the Stellar Tech World. To be Nyaron is to be blessed."
+ tenet_adaptive_nature:0 "Adaptive Nature"
+ tenet_adaptive_nature_desc:0 "We must adapt to survive in this primitive world, but never forget who we truly are."
+ nyaron_landing_site:0 "The Landing Site"
+ nyaron_landing_site_desc:0 "The sacred place where the first Nyaron arrived on this world."
+
+ # Men at Arms
+ nyaron_warriors:0 "Nyaron Warriors"
+ nyaron_warriors_desc:0 "Elite genetically-engineered soldiers with enhanced strength, speed, and combat instincts."
+ nyaron_hunters:0 "Nyaron Hunters"
+ nyaron_hunriors_desc:0 "Swift strike units that excel at pursuit and harassment tactics."
+ nyaron_guardians:0 "Nyaron Guardians"
+ nyaron_guardians_desc:0 "Heavy defensive units with enhanced toughness and protective instincts."
+
+ # Events
+ nyaron_awakening_title:0 "The Awakening"
+ nyaron_awakening_desc:0 "As you come of age, strange memories surface in your mind - images of towering metal structures, lights in the night sky, and voices speaking of 'Stellar Tech World'. You realize you are not like the humans around you. You are Nyaron."
+ nyaron_accept_nature:0 "I accept what I am."
+ nyaron_embrace_humanity:0 "I will try to live as they do."
+ 
+ nyaron_stellar_dreams_title:0 "Dreams of the Stars"
+ nyaron_stellar_dreams_desc:0 "In your sleep, you see visions of a world beyond imagination - flying machines, buildings that touch the sky, and beings like yourself living in paradise. These are the memories of your ancestors, encoded in your very genes."
+ nyaron_dream_wonder:0 "What a magnificent world..."
+ nyaron_dream_fear:0 "Will we ever return?"
+ 
+ nyaron_hunting_instinct_title:0 "The Hunt Calls"
+ nyaron_hunting_instinct_desc:0 "Your feline nature stirs within you. The urge to hunt, to pursue, to feel the thrill of the chase - it grows stronger with each passing day."
+ nyaron_hunt_prey:0 "I shall hunt."
+ nyaron_resist_instinct:0 "I must resist these urges."
+ 
+ nyaron_hunt_success_title:0 "A Successful Hunt"
+ nyaron_hunt_success_desc:0 "Your prey never stood a chance. Your enhanced senses and reflexes made the hunt almost effortless. The other nobles look upon you with a mixture of fear and admiration."
+ nyaron_hunt_glory:0 "None can match my skill."
+ 
+ nyaron_social_struggle_title:0 "The Struggle to Belong"
+ nyaron_social_struggle_desc:0 "Your different nature makes it difficult to connect with the humans at court. They whisper behind your back, calling you 'beast' or 'demon'. Yet some seem... fascinated by you."
+ nyaron_use_charm:0 "I will win them over with charm."
+ nyaron_ignore_them:0 "Their opinions matter not."
+ 
+ # Progenitor Events
+ nyaron_arrival_title:0 "Arrival on a New World"
+ nyaron_arrival_desc:0 "You remember the flash of light, the feeling of falling, and then... this world. Primitive, wild, but full of potential. You are the first of your kind here - the progenitor of a new age."
+ nyaron_arrival_survey:0 "I must establish a foothold."
+ 
+ nyaron_establish_base_title:0 "Establishing a Sanctuary"
+ nyaron_establish_base_desc:0 "The local humans are primitive but numerous. You must decide how to interact with them - build a sanctuary for your future kind, or conquer them and establish dominance?"
+ nyaron_build_sanctuary:0 "Build a sanctuary for our people."
+ nyaron_conquer_locals:0 "These primitives will serve us."
+ 
+ nyaron_genetic_legacy_title:0 "Passing the Genes"
+ nyaron_genetic_legacy_desc:0 "Your children carry your genetic legacy. They are Nyaron, just as you are. You must teach them what it means to be the children of the stars."
+ nyaron_teach_children:0 "I shall teach them our ways."
+ 
+ nyaron_search_others_title:0 "The Search for Kin"
+ nyaron_genetic_legacy_desc:0 "You cannot be the only one who survived the fall. There must be others of your kind scattered across this world. Should you search for them?"
+ nyaron_send_explorers:0 "Send explorers to find our kin."
+ nyaron_stay_isolated:0 "We must protect what we have."
+
+ # Modifiers
+ nyaron_charmed:0 "Charmed by Nyaron"
+ nyaron_hunting_high:0 "Hunting High"
+
+ # Dynasty
+ dynasty_nyaron_progenitor:0 "Nyar-Dyn"
+ bloodline_nyaron:0 "Blood of the First Nyaron"

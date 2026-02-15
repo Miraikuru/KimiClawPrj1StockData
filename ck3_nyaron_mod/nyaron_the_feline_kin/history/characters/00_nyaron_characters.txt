@@ -1,0 +1,130 @@
+# Nyaron Character History - 喵灵历史角色
+# 定义第一个喵灵（始祖）
+
+# 始祖喵灵 - 第一个降临古典世界的喵灵
+100.1.1 = {
+	create_character = {
+		name = "Nyar"
+		dynasty = dynasty_nyaron_progenitor
+		birth = 100.1.1
+		culture = nyaron_culture
+		religion = nyaron_spirituality
+		
+		# 属性
+		martial = 12
+		diplomacy = 8
+		intrigue = 6
+		stewardship = 4
+		learning = 2
+		prowess = 15
+		
+		# 特质
+		trait = nyaron
+		trait = nyaron_progenitor
+		trait = strong
+		trait = beauty_good_2
+		trait = brave
+		trait = lustful
+		
+		# 技能
+		add_skill = {
+			skill = martial
+			add = 4
+		}
+		
+		# 标志
+		set_character_flag = nyaron_first_progenitor
+		set_character_flag = is_nyaron
+		
+		# 保存角色ID
+		save_scope_as = nyaron_progenitor
+	}
+}
+
+# 始祖的初始领地
+100.1.2 = {
+	scope:nyaron_progenitor = {
+		# 创建初始领地
+		create_title = {
+			tier = county
+			landed_title = c_nyaron_landing
+		}
+		create_title = {
+			tier = duchy
+			landed_title = d_nyaron_realms
+		}
+		
+		# 获得领地
+		gain_title = c_nyaron_landing
+		gain_title = d_nyaron_realms
+		
+		# 设置首都
+		set_realm_capital = c_nyaron_landing
+		
+		# 添加建筑
+		add_building = castle_01
+		add_building = nyaron_sanctuary_01
+	}
+}
+
+# 始祖的后代
+120.1.1 = {
+	scope:nyaron_progenitor = {
+		create_child = {
+			name = "Mira"
+			female = yes
+			birth = 120.1.1
+			culture = nyaron_culture
+			religion = nyaron_spirituality
+			
+			trait = nyaron
+			trait = beauty_good_1
+			trait = quick
+			
+			martial = 8
+			diplomacy = 12
+			prowess = 10
+			
+			set_character_flag = is_nyaron
+		}
+		
+		create_child = {
+			name = "Kuro"
+			male = yes
+			birth = 122.6.15
+			culture = nyaron_culture
+			religion = nyaron_spirituality
+			
+			trait = nyaron
+			trait = strong
+			trait = brave
+			
+			martial = 14
+			prowess = 18
+			
+			set_character_flag = is_nyaron
+		}
+	}
+}
+
+# 喵灵王朝定义
+dynasty_nyaron_progenitor = {
+	name = "Nyar-Dyn"
+	culture = nyaron_culture
+	
+	# 王朝特质
+	dynasty_traits = {
+		bloodline_nyaron
+	}
+}
+
+# 血线特质
+bloodline_nyaron = {
+	name = "Blood of the First Nyaron"
+	
+	modifiers = {
+		fertility = 0.1
+		attraction_opinion = 10
+		dynasty_prestige_mult = 0.2
+	}
+}
