@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026年2月17日 财经新闻早报</title>
+    <title>2026年2月17日 每日简报</title>
     <style>
         * {
             margin: 0;
@@ -12,16 +12,18 @@
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
             min-height: 100vh;
             padding: 20px;
+            color: #e0e0e0;
         }
         .container {
             max-width: 800px;
             margin: 0 auto;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
         }
         .header {
@@ -31,8 +33,9 @@
             text-align: center;
         }
         .header h1 {
-            font-size: 24px;
+            font-size: 26px;
             margin-bottom: 10px;
+            font-weight: 600;
         }
         .header .time {
             opacity: 0.9;
@@ -41,14 +44,15 @@
         .content {
             padding: 20px;
         }
-        .category {
+        .section {
             margin-bottom: 16px;
             border-radius: 12px;
             overflow: hidden;
-            background: #f8f9fa;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        .category-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .section-header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
             color: white;
             padding: 16px 20px;
             cursor: pointer;
@@ -57,144 +61,221 @@
             align-items: center;
             font-weight: 600;
             font-size: 16px;
+            transition: all 0.3s;
         }
-        .category-header:hover {
-            opacity: 0.95;
+        .section-header:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
         }
-        .category-header .count {
-            background: rgba(255,255,255,0.2);
-            padding: 4px 12px;
-            border-radius: 20px;
+        .section-header .arrow {
+            transition: transform 0.3s;
             font-size: 12px;
         }
-        .category-content {
+        .section.active .section-header .arrow {
+            transform: rotate(180deg);
+        }
+        .section-content {
             display: none;
             padding: 16px;
         }
-        .category.active .category-content {
+        .section.active .section-content {
             display: block;
         }
-        .news-item {
-            background: white;
+        .item {
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             margin-bottom: 12px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
-        .news-title {
+        .item-header {
             padding: 14px 16px;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid transparent;
             transition: all 0.2s;
         }
-        .news-title:hover {
-            background: #f0f4ff;
+        .item-header:hover {
+            background: rgba(102, 126, 234, 0.1);
         }
-        .news-title.active {
-            border-bottom-color: #e8ecf1;
-            background: #f0f4ff;
+        .item-header.active {
+            background: rgba(102, 126, 234, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        .news-title-text {
+        .item-title {
             font-weight: 500;
-            color: #333;
+            color: #f0f0f0;
             font-size: 15px;
         }
-        .news-title .arrow {
+        .item-arrow {
             transition: transform 0.3s;
             color: #667eea;
+            font-size: 10px;
         }
-        .news-title.active .arrow {
+        .item-header.active .item-arrow {
             transform: rotate(180deg);
         }
-        .news-content {
+        .item-content {
             display: none;
             padding: 16px;
-            color: #555;
+            color: #c0c0c0;
             line-height: 1.7;
             font-size: 14px;
         }
-        .news-content.active {
+        .item-content.active {
             display: block;
         }
-        .news-content p {
+        .item-content p {
             margin-bottom: 12px;
         }
-        .news-content ul {
+        .item-content ul {
             margin-left: 20px;
             margin-bottom: 12px;
         }
-        .news-content li {
+        .item-content li {
             margin-bottom: 6px;
         }
         .highlight {
-            background: linear-gradient(120deg, #ffeaa7 0%, #ffeaa7 100%);
+            background: linear-gradient(120deg, rgba(255, 234, 167, 0.3) 0%, rgba(255, 234, 167, 0.3) 100%);
             background-repeat: no-repeat;
             background-size: 100% 40%;
             background-position: 0 88%;
             padding: 0 4px;
             font-weight: 600;
+            color: #ffeaa7;
+        }
+        .up {
+            color: #00b894;
+        }
+        .down {
+            color: #ff7675;
         }
         .tag {
             display: inline-block;
-            background: #667eea;
-            color: white;
+            background: rgba(102, 126, 234, 0.3);
+            color: #a0b0ff;
             padding: 2px 8px;
             border-radius: 4px;
-            font-size: 12px;
+            font-size: 11px;
             margin-right: 6px;
+        }
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .data-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .data-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .data-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .data-change {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .vocab-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .vocab-word {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffeaa7;
+            margin-bottom: 8px;
+        }
+        .vocab-meaning {
+            color: #a0a0a0;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .vocab-example {
+            color: #888;
+            font-size: 13px;
+            font-style: italic;
+            border-left: 3px solid #667eea;
+            padding-left: 12px;
+        }
+        .music-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .music-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .music-artist {
+            font-size: 14px;
+            color: #a0b0ff;
+            margin-bottom: 12px;
+        }
+        .music-genre {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+        .music-desc {
+            color: #c0c0c0;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        .trend-list {
+            list-style: none;
+            margin: 0;
+        }
+        .trend-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+        }
+        .trend-list li:last-child {
+            border-bottom: none;
+        }
+        .trend-rank {
+            width: 28px;
+            height: 28px;
+            background: rgba(102, 126, 234, 0.3);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .trend-rank.top {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
         }
         .footer {
             text-align: center;
             padding: 20px;
-            color: #999;
-            font-size: 12px;
-            background: #f8f9fa;
-        }
-        .rate-box {
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
-            border-radius: 10px;
-            padding: 16px;
-            margin-bottom: 12px;
-        }
-        .rate-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px dashed #ddd;
-        }
-        .rate-item:last-child {
-            border-bottom: none;
-        }
-        .rate-label {
             color: #666;
-        }
-        .rate-value {
-            font-weight: 600;
-            color: #333;
-        }
-        .rate-up {
-            color: #e74c3c;
-        }
-        .rate-down {
-            color: #27ae60;
-        }
-        .music-box {
-            background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
-            border-radius: 10px;
-            padding: 16px;
-            margin-top: 12px;
-        }
-        .music-title {
-            font-weight: 600;
-            color: #2d3436;
-            margin-bottom: 8px;
-        }
-        .music-info {
-            color: #636e72;
-            font-size: 13px;
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.2);
         }
         @media (max-width: 600px) {
             body {
@@ -204,649 +285,564 @@
                 padding: 20px;
             }
             .header h1 {
-                font-size: 20px;
+                font-size: 22px;
             }
             .content {
                 padding: 12px;
             }
-            .category-header {
-                padding: 14px 16px;
-                font-size: 15px;
+            .data-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- 头部 -->
         <div class="header">
-            <h1>📊 财经新闻早报</h1>
-            <div class="time">2026年2月17日 星期二</div>
+            <h1>📊 2026年2月17日 每日简报</h1>
+            <div class="time">星期二 | 更新于 2026-02-17 09:38:00</div>
         </div>
         
         <div class="content">
             <!-- 汇率与贵金属 -->
-            <div class="category active">
-                <div class="category-header" onclick="toggleCategory(this)">
+            <div class="section" id="section-rates">
+                <div class="section-header" onclick="toggleSection('section-rates')">
                     <span>💱 汇率与贵金属</span>
-                    <span class="count">实时数据</span>
+                    <span class="arrow">▼</span>
                 </div>
-                <div class="category-content">
-                    <div class="rate-box">
-                        <div class="rate-item">
-                            <span class="rate-label">美元/人民币</span>
-                            <span class="rate-value">7.2598 <span class="rate-up">▲</span></span>
+                <div class="section-content">
+                    <div class="data-grid">
+                        <div class="data-card">
+                            <div class="data-label">美元兑人民币</div>
+                            <div class="data-value">6.9398</div>
+                            <div class="data-change up">+0.05%</div>
                         </div>
-                        <div class="rate-item">
-                            <span class="rate-label">日元/人民币</span>
-                            <span class="rate-value">0.0473 <span class="rate-down">▼</span></span>
+                        <div class="data-card">
+                            <div class="data-label">日元兑人民币</div>
+                            <div class="data-value">0.04530</div>
+                            <div class="data-change up">+0.16%</div>
                         </div>
-                        <div class="rate-item">
-                            <span class="rate-label">欧元/人民币</span>
-                            <span class="rate-value">7.5892 <span class="rate-down">▼</span></span>
+                        <div class="data-card">
+                            <div class="data-label">黄金(元/克)</div>
+                            <div class="data-value">1110.10</div>
+                            <div class="data-change down">-1.61%</div>
                         </div>
-                        <div class="rate-item">
-                            <span class="rate-label">美元指数</span>
-                            <span class="rate-value">107.45 <span class="rate-up">▲</span></span>
-                        </div>
-                        <div class="rate-item">
-                            <span class="rate-label">现货黄金</span>
-                            <span class="rate-value">$2,895/盎司 <span class="rate-down">▼0.52%</span></span>
-                        </div>
-                        <div class="rate-item">
-                            <span class="rate-label">现货白银</span>
-                            <span class="rate-value">$32.15/盎司 <span class="rate-down">▼1.7%</span></span>
-                        </div>
-                    </div>
-                    <p style="font-size: 13px; color: #888;">数据来源：中国银行外汇牌价、国际贵金属市场 | 更新时间：2026-02-17 09:00</p>
-                </div>
-            </div>
-            
-            <!-- AI人工智能 -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <span>🤖 AI人工智能</span>
-                    <span class="count">3条</span>
-                </div>
-                <div class="category-content">
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">字节跳动Seedance 2.0视频模型全球走红</span>
-                            <span class="arrow">▼</span>
-                        </div>
-                        <div class="news-content">
-                            <p>中国人工智能视频创作模型<span class="highlight">Seedance 2.0</span>近日发布后在全球网络上迅速走红。各国用户大量分享该模型生成的超逼真视频，引发国际社会广泛关注与热议。</p>
-                            <p><strong>技术亮点：</strong></p>
-                            <ul>
-                                <li>超逼真视频生成能力</li>
-                                <li>与Gemini 3.0生成指令深度整合</li>
-                                <li>在AI视频领域与国际巨头正面竞争</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">春晚AI大战：字节、阿里正面交锋</span>
-                            <span class="arrow">▼</span>
-                        </div>
-                        <div class="news-content">
-                            <p>今年总台春晚科技感十足，聚焦于机器人与AI领域。字节跳动旗下人工智能公司火山引擎和大模型豆包与本届春晚达成深度合作，其他伙伴还包括宇树科技。</p>
-                            <p><strong>竞争态势：</strong></p>
-                            <ul>
-                                <li>阿里投入<span class="highlight">30亿元</span>春节营销，千问出现在多家卫视春晚合作名单中</li>
-                                <li>字节跳动通过豆包和火山引擎深度绑定央视</li>
-                                <li>百度文心助手、腾讯元宝同步参与AI红包大战</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">宇树科技机器人亮相春晚《武BOT》</span>
-                            <span class="arrow">▼</span>
-                        </div>
-                        <div class="news-content">
-                            <p>宇树科技的机器人练武节目《武BOT》在春晚表演后引发热议。与上一年春晚《秧BOT》相比，机器人从"转手绢"进化到"秀武术"，进化速度令人惊叹。</p>
-                            <p>中国人形机器人高调亮相春晚舞台，成为农历新年科技焦点。</p>
+                        <div class="data-card">
+                            <div class="data-label">伦敦金价(美元/盎司)</div>
+                            <div class="data-value">4953.38</div>
+                            <div class="data-change down">-0.75%</div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- 软件与互联网 -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <span>💻 软件与互联网</span>
-                    <span class="count">3条</span>
+            <!-- 财经新闻 -->
+            <div class="section" id="section-finance">
+                <div class="section-header" onclick="toggleSection('section-finance')">
+                    <span>💼 财经新闻 (18条)</span>
+                    <span class="arrow">▼</span>
                 </div>
-                <div class="category-content">
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">谷歌2026年资本支出翻倍至1750亿美元</span>
-                            <span class="arrow">▼</span>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">AI</span>OpenAI发布GPT-5.3 Codex模型，AI编程能力实现质的飞跃</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p>谷歌Q4财报亮眼：</p>
-                            <ul>
-                                <li>营收<span class="highlight">1138亿美元</span>，净利<span class="highlight">345亿美元</span>，均超预期</li>
-                                <li>2026年资本支出预计<span class="highlight">1750-1850亿美元</span></li>
-                                <li>几乎是2025年的两倍</li>
-                            </ul>
-                            <p>DeepMind CEO表示：<span class="highlight">10-15年内AI将开启科学黄金时代</span>。</p>
+                        <div class="item-content">
+                            <p>2026年2月5日，OpenAI发布GPT-5.3 Codex模型，这是OpenAI首个能够自我生成的模型，可自动完成软件工程师的编码任务。该模型不仅能编写数万行代码，还能自动测试和迭代修复应用，无需人工干预。这标志着AI从辅助工具进化为独立执行者，预示未来1-5年内50%入门级白领工作可能被取代。</p>
+                            <p><strong>来源：</strong>华尔街见闻、OpenAI官方</p>
                         </div>
                     </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">软件行业反弹窗口开启</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">AI</span>OpenAI推出首款基于Cerebras芯片的AI模型GPT-5.3-Codex-Spark</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p>全球<span class="highlight">"再通胀"交易</span>与AI国产应用升级催化，国产算力链与软件板块迎来反弹。</p>
-                            <p>2026年政策对<span class="highlight">"未来产业"</span>支持力度将超预期，软件行业迎来发展新机遇。</p>
-                        </div>
-                    </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">互联网大厂AI春节红包豪掷超45亿</span>
-                            <span class="arrow">▼</span>
-                        </div>
-                        <div class="news-content">
-                            <p>2026年，互联网大厂人工智能(AI)春节红包"战事"变得更加焦灼。</p>
-                            <p><strong>主要玩家：</strong></p>
-                            <ul>
-                                <li>百度文心助手</li>
-                                <li>腾讯元宝</li>
-                                <li>阿里千问</li>
-                                <li>字节豆包</li>
-                            </ul>
-                            <p>四巨头共豪掷超<span class="highlight">45亿元</span>红包抢未来用户。</p>
+                        <div class="item-content">
+                            <p>当地时间2月12日，OpenAI发布首款基于Cerebras Systems芯片的人工智能模型GPT-5.3-Codex-Spark，旨在扩大合作芯片制造商范围，减少对英伟达的依赖。该模型可帮助软件工程师快速完成代码编辑、测试等任务。</p>
+                            <p><strong>来源：</strong>界面新闻</p>
                         </div>
                     </div>
-                </div>
-            </div>
-            
-            <!-- 硬件与半导体 -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <span>🔧 硬件与半导体</span>
-                    <span class="count">3条</span>
-                </div>
-                <div class="category-content">
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">芯片行业利润率暴涨50%</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">AI</span>OpenAI正式下架GPT-4o等旧模型，全面转向GPT-5系列</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p>高盛最新测算数据：</p>
-                            <ul>
-                                <li><strong>三星电子</strong> NAND业务营业利润率：<span class="highlight">25% → 37%</span></li>
-                                <li><strong>SK海力士</strong>：<span class="highlight">30% → 42%</span></li>
-                                <li><strong>铠侠</strong>：营业利润率同样大幅提升</li>
-                            </ul>
-                            <p>涨幅高达<span class="highlight">50%</span>，芯片行业迎来周期性复苏。</p>
+                        <div class="item-content">
+                            <p>OpenAI于2026年2月13日正式从ChatGPT模型选择器中移除GPT-4o及其衍生模型（GPT-4.1、GPT-4.1mini、o4-mini），用户将全面转向更先进的GPT-5系列。OpenAI表示此举是因为仅0.1%用户仍在手动选择GPT-4o。</p>
+                            <p><strong>来源：</strong>AI基地、亿欧</p>
                         </div>
                     </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">半导体2026年销售额将破万亿美元</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">软件</span>软件股遭遇AI冲击恐慌，美股一周蒸发8300亿美元</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p><strong>行业预测：</strong></p>
-                            <ul>
-                                <li>SIA预测2026年销售额将达到约<span class="highlight">1万亿美元</span></li>
-                                <li>WSTS预测2026年将增长<span class="highlight">26.3%</span>至9750亿美元</li>
-                                <li>逼近万亿美元大关</li>
-                            </ul>
-                            <p><strong>核心驱动力：</strong>AI算力与数据中心需求爆发。</p>
+                        <div class="item-content">
+                            <p>Anthropic推出Claude Coworker代理式AI编程工具后，投资者担忧AI将替代SaaS软件需求，导致微软、甲骨文、Adobe等软件股集体崩盘。IGV软件ETF一周跌幅近20%，创2008年以来最差表现。花旗警告软件股远未跌透，若市盈率压缩30%，板块可能回落至2023年中期低点。</p>
+                            <p><strong>来源：</strong>21世纪经济报道</p>
                         </div>
                     </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">港股半导体板块爆发，7家广东硬科技企业入选MSCI</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">软件</span>科技巨头2026年AI资本支出达6500亿美元，同比增长70%</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p>2月16日港股半导体板块<span class="highlight">直线拉升</span>，有色金属同步活跃。</p>
-                            <p><strong>重要事件：</strong>MSCI中国指数调整，<span class="highlight">7家广东硬科技企业</span>入选，国际指数巨头对新势力企业的认可。</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 航天与太空 -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <span>🚀 航天与太空</span>
-                    <span class="count">3条</span>
-                </div>
-                <div class="category-content">
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">SpaceX发射24颗星链卫星，百万卫星计划曝光</span>
-                            <span class="arrow">▼</span>
-                        </div>
-                        <div class="news-content">
-                            <p><strong>发射详情：</strong></p>
-                            <ul>
-                                <li>时间：2026年2月15日</li>
-                                <li>地点：加州范登堡太空军基地</li>
-                                <li>载荷：<span class="highlight">24颗星链V2 Mini卫星</span></li>
-                                <li>火箭：猎鹰9号一级助推器成功回收</li>
-                            </ul>
-                            <p><strong>战略意义：</strong>马斯克计划发射<span class="highlight">100万颗卫星</span>，构建太空互联网与AI算力闭环。SpaceX已向FCC提交申请，计划发射"拥有前所未有计算能力的卫星星座"，用于支持AI大模型的在轨应用。</p>
+                        <div class="item-content">
+                            <p>谷歌、微软、亚马逊、Meta四家科技巨头2026年合计资本支出指引约6500亿美元（若计入甲骨文与CoreWeave达7400亿美元），同比增长约70%。亚马逊最激进，预计支出2000亿美元；谷歌1750-1850亿美元；Meta 1150-1350亿美元。巨额投资引发市场对现金流和盈利能力的担忧。</p>
+                            <p><strong>来源：</strong>证券时报、华尔街日报</p>
                         </div>
                     </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">SpaceX完成2026首次载人发射</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">软件</span>阿里千问App接入淘宝生态，日活用户突破7352万</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p>SpaceX成功完成2026年首次载人航天发射，使用2手助推器B1101-2和5手龙飞船自由号C212-5组成的猎鹰9号，将<span class="highlight">NASA Crew-12的4名宇航员</span>送往国际空间站。</p>
-                            <p>宇航员将开展约<span class="highlight">8个月的科研任务</span>，为未来月球和火星探索做准备。</p>
-                        </div>
-                    </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">中国航天成功发射巴基斯坦卫星</span>
-                            <span class="arrow">▼</span>
-                        </div>
-                        <div class="news-content">
-                            <p>中国航天科技集团抓总研制新型运载火箭，成功将巴基斯坦PRSC-EO2卫星等<span class="highlight">7颗卫星</span>精准送入预定轨道。</p>
-                            <p>中国长征火箭有限公司负责商业运营，标志中国商业航天国际化步伐加快。</p>
+                        <div class="item-content">
+                            <p>2026年1月，阿里千问App宣布接入淘宝闪购、支付宝、飞猪、高德等生态场景，测试AI购物功能。2月7日千问DAU达7352万，逼近豆包DAU的7871万，连续6天霸榜App Store免费榜第一。阿里千问成为唯二的全栈AI公司（与谷歌并列），未来三年将投入3800亿元用于AI资本开支。</p>
+                            <p><strong>来源：</strong>36氪、QuestMobile</p>
                         </div>
                     </div>
-                </div>
-            </div>
-            
-            <!-- 贵金属与大宗商品 -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <span>🥇 贵金属与大宗商品</span>
-                    <span class="count">3条</span>
-                </div>
-                <div class="category-content">
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">黄金、白银短线下跌，测试关键支撑</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">硬件</span>存储芯片价格暴涨75%，全球陷入内存危机</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p><strong>2月17日开盘行情：</strong></p>
-                            <ul>
-                                <li>现货黄金：<span class="highlight">跌0.52%</span>，报$2,895/盎司</li>
-                                <li>现货白银：<span class="highlight">跌超1.7%</span>，一度跌逾3%</li>
-                            </ul>
-                            <p><strong>影响因素：</strong></p>
-                            <ul>
-                                <li>美国1月通胀数据低于预期</li>
-                                <li>重新点燃市场对美联储今年降息的希望</li>
-                                <li>降息预期盖过避险需求，金价测试2900关口支撑</li>
-                            </ul>
+                        <div class="item-content">
+                            <p>AI数据中心扩张导致DRAM芯片严重短缺，2025年12月至2026年1月某类DRAM价格暴涨75%。马斯克警告特斯拉将不得不自建内存制造厂，苹果CEO库克称内存短缺将压缩iPhone利润率。三星、SK海力士已将大部分产能转向HBM（高带宽内存），导致消费电子用普通DRAM供应枯竭。</p>
+                            <p><strong>来源：</strong>彭博社、证券时报</p>
                         </div>
                     </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">有色金属板块集体走强</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">硬件</span>铠侠宣布NAND价格暴涨50%，存储行业迎来超级周期</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p><strong>港股有色金属表现：</strong></p>
-                            <ul>
-                                <li><strong>灵宝黄金</strong>、<strong>洛阳钼业</strong>涨逾<span class="highlight">7%</span></li>
-                                <li><strong>江西铜业</strong>、<strong>中国有色矿业</strong>、<strong>山东黄金</strong>、<strong>中国宏桥</strong>涨超<span class="highlight">4%</span></li>
-                                <li><strong>中国铝业</strong>、<strong>紫金矿业</strong>涨超<span class="highlight">3%</span></li>
-                            </ul>
-                            <p><strong>驱动逻辑：</strong>全球"再通胀"交易预期升温，资源品板块受益。</p>
+                        <div class="item-content">
+                            <p>日本存储巨头铠侠预计从2026年Q1开始，针对北美客户的平均销售价格（ASP）环比提升约50%。高盛预计三星电子NAND业务营业利润率将从25%提升至37%，SK海力士从30%跃升至42%。NAND闪存供应紧张局面预计持续至2027年。</p>
+                            <p><strong>来源：</strong>证券时报、Daishin Securities</p>
                         </div>
                     </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">大宗商品价格指数维持高位</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">硬件</span>长鑫科技科创板IPO获受理，国产存储芯片第一股冲刺</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p>据生意社价格监测，2026年2月上旬与1月下旬相比，<span class="highlight">28种产品价格上涨</span>，20种下降，2种持平。</p>
-                            <p><strong>涨幅领先：</strong>动力煤(+0.70%)、环氧树脂(+0.24%)</p>
-                            <p>大宗商品价格指数近3月涨幅<span class="highlight">6.06%</span>，近6月涨幅<span class="highlight">6.54%</span>。</p>
+                        <div class="item-content">
+                            <p>2025年12月30日，长鑫科技科创板IPO申请获受理，拟募资295亿元。公司2025年预计营收550-580亿元，全球DRAM市占率提升至8%，稳居全球第四、中国第一。公司正在推进HBM技术研发，HBM3样品已完成研发并交付客户测试，计划2027年实现规模化量产。</p>
+                            <p><strong>来源：</strong>凤凰网财经</p>
                         </div>
                     </div>
-                </div>
-            </div>
-            
-            <!-- 国内外时事 -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <span>🌍 国内外时事</span>
-                    <span class="count">3条</span>
-                </div>
-                <div class="category-content">
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">A股1月创下4190点高位，成交额创历史新高</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">航天</span>长征十号完成海上软着陆，中国载人登月工程获关键突破</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p>"2026年1月，沪指创下<span class="highlight">4190点</span>的高位，并伴随<span class="highlight">3.99万亿元</span>单日成交额的历史天量，当月换手率为48%，创下历史峰值。</p>
-                            <p>此外，2026年开年至今，市场出现7000亿元的ETF流出。</p>
+                        <div class="item-content">
+                            <p>2月11日，长征十号甲火箭在文昌发射场完成低空演示验证与梦舟飞船最大动压逃逸飞行试验，首次将逃逸测试与一级回收验证放在同一次真实飞行中完成。芯一级通过海上回收船网系柔性捕获实现受控溅落，标志着中国走出独立于SpaceX的火箭回收第三条路，为2030年前载人登月奠定关键技术基础。</p>
+                            <p><strong>来源：</strong>搜狐科技</p>
                         </div>
                     </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">美股蛇年收官：纳指涨幅超14%</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">航天</span>SpaceX星链用户突破1000万，马斯克宣布将向地球外扩展</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p>由于2月16日公共假期，乙巳蛇年美股交易已经收官。</p>
-                            <p><strong>年度表现（2025.1.29-2026.2.14）：</strong></p>
-                            <ul>
-                                <li>纳指涨幅：<span class="highlight">14.26%</span>，报22546.67点</li>
-                                <li>标普500指数同步上涨</li>
-                                <li>科技股领涨大盘</li>
-                            </ul>
+                        <div class="item-content">
+                            <p>截至2026年2月，SpaceX星链活跃用户正式突破1000万，业务覆盖全球160多个国家和地区。马斯克在X平台表示星链很快就能在地球之外服务，暗示将为未来的月球、火星深空探索提供通信支持。2025年星链用户从500万增至1000万仅用47天。</p>
+                            <p><strong>来源：</strong>新浪财经</p>
                         </div>
                     </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">春节出境游：韩国成新热门目的地</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">航天</span>中国向ITU申报近20万颗低轨卫星，加速布局卫星互联网</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p>韩国文化体育观光部和韩国观光公社披露，从2月15日开始的九天春节假期内，预计将有<span class="highlight">19万名中国游客</span>赴韩旅游，比去年同期增加<span class="highlight">44%</span>。</p>
-                            <p>日本失宠，中国游客涌向韩国成为新趋势。</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 扩展国际新闻 -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <span>🌐 扩展国际新闻</span>
-                    <span class="count">4条</span>
-                </div>
-                <div class="category-content">
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">日本金融市场创造历史：日元与股市首次同涨</span>
-                            <span class="arrow">▼</span>
-                        </div>
-                        <div class="news-content">
-                            <p>日本金融市场正在创造历史：<span class="highlight">日元与东证指数的相关性，自2005年以来首次转为正值</span>。</p>
-                            <p>这意味着日元和日本股市同时上涨，这在当前市场中是一个罕见的历史信号，显示日本经济可能进入新周期。</p>
+                        <div class="item-content">
+                            <p>2026年1月，中国向国际电信联盟（ITU）申报多个卫星星座计划，申报总数超过20万颗，涵盖14个卫星星座。其中无线电创新院CTC-1和CTC-2两个星座各申请96,714颗。中国星网GW星座计划部署12,992颗卫星，千帆星座计划发射1.2万颗卫星。</p>
+                            <p><strong>来源：</strong>国防安全研究院</p>
                         </div>
                     </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">谷爱凌登上《时代周刊》封面</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">商品</span>黄金白银价格剧烈波动，1月30日创40年来最大单日跌幅</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p>《TIME》（时代周刊）2026年2月9日那一期的封面主角是<span class="highlight">谷爱凌</span>。</p>
-                            <p>这位"华裔"选手在2026冬奥会期间成为焦点人物，但也引发争议：一边在美国被骂"叛徒""非法移民帮凶"，一边在中国被酸"四年才回来一次"。</p>
-                        </div>
-                    </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">欧洲股市：AI担忧抵消银行反弹</span>
-                            <span class="arrow">▼</span>
-                        </div>
-                        <div class="news-content">
-                            <p>欧洲股市表现平淡，银行股反弹被<span class="highlight">人工智能对工业软件颠覆性影响的担忧</span>所抵消，达索系统股价下跌10%。</p>
-                            <p>斯托克欧洲600指数收盘基本持平，电信和保险类股跑赢大盘。</p>
+                        <div class="item-content">
+                            <p>2026年1月国际金价从4300美元/盎司最高飙升至5600美元/盎司，涨幅超30%；白银从70美元/盎司飙涨至121美元/盎司，涨幅约72%。但1月30日现货黄金大跌超9%，创40年来最大单日跌幅；现货白银盘中暴跌超35%，创历史最大跌幅。芝加哥商品交易所已上调黄金、白银期货保证金比例。</p>
+                            <p><strong>来源：</strong>第一财经、证券时报</p>
                         </div>
                     </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">中国人形机器人亮相春晚引发国际关注</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">商品</span>有色金属板块进入超级周期2.0，机构看好中长期行情</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p>中国人形机器人高调亮相春晚舞台成为农历新年焦点，引发国际媒体广泛报道。</p>
-                            <p>ABC News等国际媒体关注中国机器人技术的快速发展，以及AI与传统文化的融合。</p>
+                        <div class="item-content">
+                            <p>2025年有色金属板块涨幅近90%，基金经理普遍认为当前处于超级周期2.0进程中。驱动因素包括：逆全球化下的资源安全诉求、AI和能源转型带来的结构性需求、供给端资本开支不足等。机构看好铜、金、铝、碳酸锂、小金属（钨）等品种，预计价格景气周期远未终结。</p>
+                            <p><strong>来源：</strong>证券时报、中国基金报</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">商品</span>国投瑞银白银LOF估值调整，发布行业首例补偿方案</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>受白银市场价格历史性极端行情影响，国投瑞银对白银期货证券投资基金（LOF）进行估值调整。公司制定专项补偿方案：对估值调整影响金额1000元以下的自然人投资者按实际影响金额全额补偿，超1000元部分按比例补偿。相关小程序于2026年2月26日启用。</p>
+                            <p><strong>来源：</strong>证券时报</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">国内国际</span>国务院专题学习强调深化拓展人工智能+，全方位赋能千行百业</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>2月11日，国务院以深化拓展人工智能+、全方位赋能千行百业为主题进行第十八次专题学习。国务院总理李强强调要全面推进人工智能科技创新、产业发展和赋能应用，培育壮大新质生产力，推动高质量发展。</p>
+                            <p><strong>来源：</strong>新华社</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">国内国际</span>美股三大指数本周均录得跌幅，AI颠覆担忧蔓延</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>截至2月14日，美股道指本周下跌1.23%，纳指下跌2.1%，标普500指数下跌1.39%。市场对AI颠覆影响的担忧蔓延至房地产、卡车运输和软件行业。思科因令人失望的指引股价重挫12%，苹果下跌5%创2025年4月以来最大单日跌幅。美国1月核心CPI创近5年新低，6月降息概率上调至约83%。</p>
+                            <p><strong>来源：</strong>新浪财经、华尔街见闻</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">国内国际</span>国务院国资委推动央企积极扩大算力有效投资</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>国务院国资委日前提出，中央企业要强化投资牵引，积极扩大算力有效投资，推进算力+电力协同发展，提升全链条数据治理能力，不断夯实人工智能产业基础底座。同时要求央企强化开源开放协同，推进AI+产业共同体建设。</p>
+                            <p><strong>来源：</strong>新华社</p>
                         </div>
                     </div>
                 </div>
             </div>
             
             <!-- 推特Trend -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <span>📱 推特Trend</span>
-                    <span class="count">日韩欧美</span>
+            <div class="section" id="section-twitter">
+                <div class="section-header" onclick="toggleSection('section-twitter')">
+                    <span>📈 推特Trend</span>
+                    <span class="arrow">▼</span>
                 </div>
-                <div class="category-content">
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">🇯🇵 日本热门话题</span>
-                            <span class="arrow">▼</span>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🇺🇸 美国 Trend</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <ul>
-                                <li><span class="highlight">#春節</span> - 中国春节相关话题持续发酵</li>
-                                <li><span class="highlight">#宇樹科技</span> - 春晚机器人表演引发技术讨论</li>
-                                <li><span class="highlight">#円高</span> - 日元走强成为经济焦点</li>
+                        <div class="item-content">
+                            <ul class="trend-list">
+                                <li><span class="trend-rank top">1</span>Knicks</li>
+                                <li><span class="trend-rank top">2</span>Shamet</li>
+                                <li><span class="trend-rank top">3</span>#AEWDynamite</li>
+                                <li><span class="trend-rank">4</span>#CMAAwards</li>
+                                <li><span class="trend-rank">5</span>Brandon Williams</li>
+                                <li><span class="trend-rank">6</span>Derik Queen</li>
+                                <li><span class="trend-rank">7</span>#Survivor49</li>
+                                <li><span class="trend-rank">8</span>FEMA</li>
+                                <li><span class="trend-rank">9</span>Vooch</li>
+                                <li><span class="trend-rank">10</span>Labaron Philon</li>
+                                <li><span class="trend-rank">11</span>Vucevic</li>
+                                <li><span class="trend-rank">12</span>#AEWCollision</li>
+                                <li><span class="trend-rank">13</span>Blazers</li>
+                                <li><span class="trend-rank">14</span>NO CAP</li>
+                                <li><span class="trend-rank">15</span>#SeeRed</li>
                             </ul>
                         </div>
                     </div>
                     
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">🇰🇷 韩国热门话题</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🇯🇵 日本 Trend</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <ul>
-                                <li><span class="highlight">#중국관광객</span> - 中国游客激增44%成热点</li>
-                                <li><span class="highlight">#설연휴</span> - 春节假期旅游话题</li>
-                                <li><span class="highlight">#K뷰티</span> - 韩国美妆持续吸引中国游客</li>
-                            </ul>
-                        </div>
-                    </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">🇺🇸 欧美热门话题</span>
-                            <span class="arrow">▼</span>
-                        </div>
-                        <div class="news-content">
-                            <ul>
-                                <li><span class="highlight">#SpaceX</span> - 百万卫星计划引发热议</li>
-                                <li><span class="highlight">#GoogleEarnings</span> - 谷歌财报与AI投资</li>
-                                <li><span class="highlight">#EileenGu</span> - 谷爱凌《时代周刊》封面争议</li>
+                        <div class="item-content">
+                            <ul class="trend-list">
+                                <li><span class="trend-rank top">1</span>Twitter調子</li>
+                                <li><span class="trend-rank top">2</span>.hack</li>
+                                <li><span class="trend-rank top">3</span>X不具合</li>
+                                <li><span class="trend-rank">4</span>デカグラマトン編</li>
+                                <li><span class="trend-rank">5</span>王子さま</li>
+                                <li><span class="trend-rank">6</span>Xの調子</li>
+                                <li><span class="trend-rank">7</span>#ふるっぱーANNX</li>
+                                <li><span class="trend-rank">8</span>#LINEマンガ読んでポイ活</li>
+                                <li><span class="trend-rank">9</span>#中嶋優月生誕祭</li>
+                                <li><span class="trend-rank">10</span>#井上和生誕祭</li>
+                                <li><span class="trend-rank">11</span>ツイッター</li>
+                                <li><span class="trend-rank">12</span>#ゴールデンカムイ</li>
+                                <li><span class="trend-rank">13</span>通信障害</li>
+                                <li><span class="trend-rank">14</span>劇薬中毒</li>
+                                <li><span class="trend-rank">15</span>ルネの太陽</li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- 游戏新闻 -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
-                    <span>🎮 游戏新闻</span>
-                    <span class="count">重点关注</span>
+            <!-- 新浪/百度热搜 -->
+            <div class="section" id="section-hotsearch">
+                <div class="section-header" onclick="toggleSection('section-hotsearch')">
+                    <span>🔥 百度热搜榜</span>
+                    <span class="arrow">▼</span>
                 </div>
-                <div class="category-content">
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">Steam独立游戏周报（2月第2周）</span>
-                            <span class="arrow">▼</span>
+                <div class="section-content">
+                    <ul class="trend-list">
+                        <li><span class="trend-rank top">1</span>温暖瞬间 饱含深情</li>
+                        <li><span class="trend-rank top">2</span>秦岚李沁王楚然美成啥了</li>
+                        <li><span class="trend-rank top">3</span>来自天宫的新春问候请查收</li>
+                        <li><span class="trend-rank">4</span>大年初一不洗头不煮饭</li>
+                        <li><span class="trend-rank">5</span>中方驳回交涉3问日方：难道不是事实吗</li>
+                        <li><span class="trend-rank">6</span>马丽给撒贝宁戴上马头帽</li>
+                        <li><span class="trend-rank">7</span>谷爱凌自由式滑雪女子大跳台夺银</li>
+                        <li><span class="trend-rank">8</span>王兴兴揭秘机器人"练功秘籍"</li>
+                        <li><span class="trend-rank">9</span>炖肉时的浮沫是营养精华？假的</li>
+                        <li><span class="trend-rank">10</span>王菲春晚表演 女儿发"挖嘞个亲娘"</li>
+                        <li><span class="trend-rank">11</span>邓超从魔丸变成灵珠</li>
+                        <li><span class="trend-rank">12</span>王菲一开口时间都慢了</li>
+                        <li><span class="trend-rank">13</span>尼格买提终于和大家一样了</li>
+                        <li><span class="trend-rank">14</span>宇树人形机器人化身孙悟空</li>
+                        <li><span class="trend-rank">15</span>机器人全面入侵春晚</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 游戏新闻 -->
+            <div class="section" id="section-gaming">
+                <div class="section-header" onclick="toggleSection('section-gaming')">
+                    <span>🎮 游戏新闻 (15条)</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">PC</span>《太吾绘卷：天幕心帷》完全版正式发售</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p><strong>本周亮点新作：</strong></p>
-                            <ul>
-                                <li><span class="highlight">《Dear me, I was...》</span> - 描绘女性一生的艺术叙事小品</li>
-                                <li><span class="highlight">《怪物实验室模拟器》</span> - 主打怪物培养与竞技场战斗</li>
-                                <li><span class="highlight">《星砂島》</span> - 生活模拟取向新作</li>
-                            </ul>
-                            <p><strong>即将发售：</strong>《Demon Tides》（2月19日），恶魔少女Beebz夺取女王宝座！</p>
-                        </div>
-                    </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">《模拟人生4》皇室与传承扩展包发布</span>
-                            <span class="arrow">▼</span>
-                        </div>
-                        <div class="news-content">
-                            <p>《The Sims™ 4 皇室与传承》扩展包于<span class="highlight">2026年2月12日</span>正式发售。</p>
-                            <p><strong>新内容：</strong></p>
-                            <ul>
-                                <li>全新的王朝与贵族系统</li>
-                                <li>创造多代人的传说</li>
-                                <li>揭露并点燃阴暗的丑闻</li>
-                                <li>遭遇神奇的权力转移</li>
-                            </ul>
-                            <p>同步推出《银幕风采》和《茶叙阳光房》套件包。</p>
-                        </div>
-                    </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">《太吾绘卷》1.0正式版延期至2026年4月</span>
-                            <span class="arrow">▼</span>
-                        </div>
-                        <div class="news-content">
-                            <p>国产武侠游戏《太吾绘卷》开发商螺舟工作室宣布，1.0正式版《太吾绘卷：天幕心帷》延期至<span class="highlight">2026年4月</span>上线。</p>
-                            <p><strong>开发历程：</strong></p>
-                            <ul>
-                                <li>自2022年至今已进行<span class="highlight">40余次超大型更新</span></li>
-                                <li>涵盖剧情内容、玩法迭代、系统平衡与性能优化</li>
-                                <li>已越过独立游戏的"止损点"</li>
-                            </ul>
-                            <p>当前Steam史低促销中，8折售价。</p>
+                        <div class="item-content">
+                            <p>国产神话武侠题材独立游戏《太吾绘卷》完全版《太吾绘卷：天幕心帷》于2026年2月17日（春节）正式发售。该版本是游戏的完全体，由螺舟工作室开发，是首款鸿蒙全场景独家游戏。</p>
+                            <p><strong>来源：</strong>https://www.ithome.com/0/900/829.htm</p>
                         </div>
                     </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">二游市场：2025年最挣钱手游榜单揭晓</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">PC</span>《模拟人生4：王室与传承》资料片推出</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p><strong>2025年国产二游流水TOP：</strong></p>
-                            <ul>
-                                <li>🥇 <span class="highlight">《崩坏：星穹铁道》</span> - 40亿元</li>
-                                <li>🥈 <span class="highlight">《原神》</span> - 30亿元</li>
-                                <li>🥉 <span class="highlight">《命运-冠位指定》</span> - 30亿元</li>
-                            </ul>
-                            <p>米哈游两款游戏进TOP3，鸣潮、绝区零等新游崛起。</p>
+                        <div class="item-content">
+                            <p>《模拟人生4》新资料片《王室与传承》已正式推出。即日起至2026年3月15日，购买该资料片可免费升级为「巨型版」。新资料片引入了丑闻系统和王室玩法。</p>
+                            <p><strong>来源：</strong>https://gnn.gamer.com.tw/detail.php?sn=300418</p>
                         </div>
                     </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">《终末地》上线首周收入8360万</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">PC</span>《异星验尸官》发售</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p>射击与二次元赛道迎来开年大捷：《逆战：未来》与《终末地》前后上线，分别豪取<span class="highlight">4230万</span>与<span class="highlight">8360万</span>。</p>
-                            <p><strong>《终末地》特色：</strong></p>
-                            <ul>
-                                <li>大型箱庭世界探索、战斗、解谜</li>
-                                <li>核心玩法围绕"基建"和类死亡搁浅的异步联机系统</li>
-                                <li>在二游品类中玩法独特</li>
-                            </ul>
+                        <div class="item-content">
+                            <p>模拟游戏《异星验尸官》于2026年2月17日发售，由BurGum Games制作发行。玩家扮演专注于外星生物的病理学家，工作台是最后一道防线。</p>
+                            <p><strong>来源：</strong>https://ku.gamersky.com/release/</p>
                         </div>
                     </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">2026年最受期待的国产二游</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">PC</span>Steam新品节2026年2月版即将开启</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p>全球玩家急不可耐，最期待的10款二游全是"中国造"！</p>
-                            <p><strong>重点期待作品：</strong></p>
-                            <ul>
-                                <li><span class="highlight">《无限大》</span> - 网易开放世界新作，取消角色抽卡商业模式</li>
-                                <li><span class="highlight">《蓝色星原》</span> - 全新IP二次元大作</li>
-                                <li><span class="highlight">《异环》</span> - 都市奇幻题材</li>
-                                <li><span class="highlight">《鸣潮》</span> - 持续更新中</li>
-                            </ul>
+                        <div class="item-content">
+                            <p>Steam新品节2026年2月版将于2月23日-3月2日(PT)举办，玩家可免费畅玩数百款尚未推出的游戏试用版，与开发者互动交流。</p>
+                            <p><strong>来源：</strong>https://store.steampowered.com/sale/nextfest</p>
                         </div>
                     </div>
-                    
-                    <div class="news-item">
-                        <div class="news-title" onclick="toggleNews(this)">
-                            <span class="news-title-text">同人JRPG与DLsite动态</span>
-                            <span class="arrow">▼</span>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">PC</span>《死亡搁浅2》艺术设定集发售</span>
+                            <span class="item-arrow">▼</span>
                         </div>
-                        <div class="news-content">
-                            <p><strong>DLsite热门新作：</strong></p>
-                            <ul>
-                                <li>《妹相随～黑白世界的缤纷冒险～》持续热销</li>
-                                <li>RPG Maker引擎制作的独立佳作受关注</li>
-                            </ul>
-                            <p><strong>Steam同人JRPG：</strong></p>
-                            <ul>
-                                <li>《女神的恶灵退治》（2月12日发售）</li>
-                                <li>《Spiritbound: The Goddess's Quest》获得好评</li>
-                            </ul>
+                        <div class="item-content">
+                            <p>《死亡搁浅2：冥海之畔》艺术设定集于2026年2月17日发售，240页精装书收录新川洋司概念艺术设计。</p>
+                            <p><strong>来源：</strong>https://news.17173.com/quanqiu/index_9.shtml</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">PC</span>《战地风云》第2赛季测试</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>《战地风云》实验室第2赛季测试于2月17日开启，第1赛季延续至原定1月20日的游戏内结束时间之后。</p>
+                            <p><strong>来源：</strong>https://www.ea.com/zh-cn/games/the-sims/news/battlefield-6-community-update-battlefield-labs-season-2-testing-and-beyond</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">手游</span>《崩坏：星穹铁道》4.0版本爻光卡池流水出炉</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>《崩坏：星穹铁道》4.0版本上半爻光+3角色复刻卡池流水表现一般，国服排名第8，全球7个国家和地区排名前十。爻光作为新角色抽取比例最高，但和复刻角色差距不大。4.0版本虚构叙事攻略发布，遐蝶记忆队、卡海黑dot队、主C+爻光欢愉队等配队可轻松拿满分。</p>
+                            <p><strong>来源：</strong>http://news.17173.com/content/02172026/092650746.shtml</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">手游</span>《明日方舟：终末地》三大新春活动上线</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>《明日方舟：终末地》于2月15日-16日上线三大新春活动：宏运连连乐邮件赠礼活动（每日发放邮件，15/16/17/21日可获得880嵌晶玉）、暖笺贺春分享活动（7个关卡，完成可得嵌晶玉）、步步登高新春福利（2月16/17/21日晚8点发放祝福邮件）。活动总计可获5000+嵌晶玉。</p>
+                            <p><strong>来源：</strong>http://news.17173.com/content/02162026/152518809.shtml</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">手游</span>《绝区零》2.6版本「旧梦的安可曲」更新</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>《绝区零》2.6版本「旧梦的安可曲」已于2月6日更新，新增「虚幻天使」阵营及三位全新S级代理人千夏、仪玄、爱芮、浮波柚叶，新增时装及40亿菲林瓜分活动。</p>
+                            <p><strong>来源：</strong>https://zenless.hoyoverse.com/m/zh-cn/news/162561</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">手游</span>《异环》三测进行中</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>完美世界自研游戏《异环》于2月4日开启三测（共存测试），为限量删档计费测试，持续至2月18日。游戏基于虚幻引擎5开发，测试反响良好，体验都市开放世界二游。</p>
+                            <p><strong>来源：</strong>http://news.17173.com/content/02102026/110930899.shtml</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">手游</span>网易《无限大》已完成封闭测试</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>网易开放世界游戏《无限大》已完成封闭测试，计划全平台发布。该游戏于1月16日-20日在中国地区开启首次封闭测试，客户端约46GB。</p>
+                            <p><strong>来源：</strong>https://www.163.com/dy/article/KLUBGRKR05568W0A.html</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">手游</span>《蓝色星原：旅谣》台北电玩展展出</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>《蓝色星原：旅谣》于2026年1月29日-2月1日参加台北国际电玩展，展出地点为台北南港展览馆1馆，蛮啾网络开发的美少女开放世界游戏。</p>
+                            <p><strong>来源：</strong>https://gnn.gamer.com.tw/detail.php?sn=299371</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">行业</span>字节跳动出售沐瞳科技给沙特PIF</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>字节跳动传出将出售旗下游戏公司沐瞳科技给沙特阿拉伯公共投资基金(PIF)下属Savvy Games Group公司，交易价格高于60亿美元(新台币1,906亿元)，预计近期完成交易。</p>
+                            <p><strong>来源：</strong>https://money.udn.com/money/story/5604/9331018</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">行业</span>网易2026年展望：新品上线与市场流动性</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>网易计划在2026年推出多款重磅游戏，海洋冒险RPG《遗忘之海》预计第三季度上线，《无限大》已完成封闭测试。若网易被纳入港股通，可能吸引南向资金流入。公司已将AI系统化融入游戏研发全流程，部分环节效率提升超300%。</p>
+                            <p><strong>来源：</strong>https://www.163.com/dy/article/KLUBGRKR05568W0A.html</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">行业</span>Applovin财报超预期但股价大跌</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>尽管Applovin核心财务指标全面碾压华尔街预期，且2026年一季度指引强劲，但受市场对AI颠覆游戏开发及巨头竞争的担忧影响，公司股价在盘后交易中大幅下挫。</p>
+                            <p><strong>来源：</strong>https://wallstreetcn.com/articles/3765557</p>
                         </div>
                     </div>
                 </div>
             </div>
             
             <!-- 每日一曲 -->
-            <div class="category">
-                <div class="category-header" onclick="toggleCategory(this)">
+            <div class="section" id="section-music">
+                <div class="section-header" onclick="toggleSection('section-music')">
                     <span>🎵 每日一曲</span>
-                    <span class="count">推荐</span>
+                    <span class="arrow">▼</span>
                 </div>
-                <div class="category-content">
-                    <div class="music-box">
-                        <div class="music-title">🎤 《アイドル》(Idol) - YOASOBI</div>
-                        <div class="music-info">
-                            <p><strong>曲风：</strong>J-Pop / 电子流行</p>
-                            <p><strong>背景介绍：</strong></p>
-                            <p>虽然这首歌发布于2023年，但在2026年依然热度不减。作为动画《我推的孩子》主题曲，它完美融合了YOASOBI标志性的叙事性歌词与抓耳的电子旋律。</p>
-                            <p><strong>推荐理由：</strong>歌曲以偶像行业为背景，讲述了一个关于梦想、谎言与真实的故事。Ayase的编曲层次丰富，ikura的演绎充满张力，副歌部分极具记忆点。无论是歌词深度还是音乐性都堪称近年J-Pop的标杆之作。</p>
-                            <p style="margin-top: 10px; font-size: 12px; color: #888;">💡 可在Spotify、Apple Music、YouTube Music等平台收听</p>
+                <div class="section-content">
+                    <div class="music-card">
+                        <div class="music-title">罰して光 (Punish Then Save / 惩罚之光)</div>
+                        <div class="music-artist">なきそ (Nakiso) feat. 初音ミク (Hatsune Miku)</div>
+                        <div class="music-genre">Vocaloid / 日语电子流行</div>
+                        <div class="music-desc">
+                            なきそ(Nakiso)是近年来备受瞩目的Vocaloid制作人，曾以《お呪い》(咒语/诅咒)一曲在2023年创下百万播放纪录。这首2026年2月发布的新作《罰して光》延续了他标志性的暗黑甜美风格——从前奏开始便弥漫着不祥的气息，将甜蜜与疼痛交织在一起。歌曲以忏悔与恳求等沉重情绪为核心，通过不断重复的句子一点一滴将听者的心逼向绝境，初音未来无机的歌声与冷冽的曲风完美呼应。なきそ擅长以独特的世界观描绘复杂的情感，本作对于因逝去的爱而痛苦、或背负无处安放情绪的人，想必会深受触动。
                         </div>
                     </div>
-                    
-                    <div style="margin-top: 16px;">
-                        <p><strong>🎧 其他推荐：</strong></p>
-                        <ul style="margin-left: 20px; font-size: 13px; color: #555;">
-                            <li><span class="highlight">Vocaloid新碟：</span>Crypton Future Media旗下厂牌KARENT于2026年1月发行10张新专辑，可在Spotify、Apple Music收听</li>
-                            <li><span class="highlight">华语推荐：</span>周深&单依纯《天海一心》- 中日双语融合，深受日本听众喜爱</li>
-                        </ul>
+                </div>
+            </div>
+            
+            <!-- 行业英语词汇 -->
+            <div class="section" id="section-vocab">
+                <div class="section-header" onclick="toggleSection('section-vocab')">
+                    <span>📚 今日5个行业英语词汇</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="vocab-item">
+                        <div class="vocab-word">reusable spacecraft</div>
+                        <div class="vocab-meaning">可重复使用航天器</div>
+                        <div class="vocab-example">China successfully launched a reusable spacecraft on Saturday, which will carry out technical verification of reusable spacecraft technology and provide technical support for the peaceful use of space.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">capital expenditure (CapEx)</div>
+                        <div class="vocab-meaning">资本支出</div>
+                        <div class="vocab-example">TSMC guided its 2026 capital expenditure at $52-56 billion, significantly exceeding market expectations, validating the sustained AI demand and tight supply of advanced process capacity.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">stablecoin</div>
+                        <div class="vocab-meaning">稳定币</div>
+                        <div class="vocab-example">China's central bank and eight departments issued a notice stating that without lawful approval, no entity or individual may issue stablecoins pegged to the Chinese yuan overseas.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">real-world asset tokenization</div>
+                        <div class="vocab-meaning">现实世界资产代币化</div>
+                        <div class="vocab-example">The notice clarifies that real-world asset tokenization activities conducted within China, which use encryption technology to convert asset ownership into tokens, should be prohibited as they constitute illegal financial activities.</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">high-bandwidth memory (HBM)</div>
+                        <div class="vocab-meaning">高带宽内存</div>
+                        <div class="vocab-example">Chinese semiconductor equipment companies possess significant strategic advantages, driven by capacity demand for AI GPUs, high-bandwidth memory (HBM), and inspection equipment.</div>
                     </div>
                 </div>
             </div>
         </div>
         
         <div class="footer">
-            💡 点击分类标题展开该领域新闻，点击新闻标题查看详情<br>
-            数据来源：公开市场信息整理 | 仅供参考，不构成投资建议
+            💡 点击标题展开/收起 | 每日更新于上午9:00 (GMT+8)
         </div>
     </div>
     
     <script>
-        function toggleCategory(header) {
-            const category = header.parentElement;
-            category.classList.toggle('active');
+        function toggleSection(id) {
+            const section = document.getElementById(id);
+            section.classList.toggle('active');
         }
         
-        function toggleNews(title) {
-            const content = title.nextElementSibling;
-            title.classList.toggle('active');
+        function toggleItem(header) {
+            const content = header.nextElementSibling;
+            header.classList.toggle('active');
             content.classList.toggle('active');
         }
     </script>
