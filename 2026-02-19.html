@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-02-19 每日简报</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 26px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .header .time {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .section-header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+            color: white;
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .section-header:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+        }
+        .section-header .arrow {
+            transition: transform 0.3s;
+            font-size: 12px;
+        }
+        .section.active .section-header .arrow {
+            transform: rotate(180deg);
+        }
+        .section-content {
+            display: none;
+            padding: 16px;
+        }
+        .section.active .section-content {
+            display: block;
+        }
+        .item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .item-header {
+            padding: 14px 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        .item-header:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+        .item-header.active {
+            background: rgba(102, 126, 234, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .item-title {
+            font-weight: 500;
+            color: #f0f0f0;
+            font-size: 15px;
+        }
+        .item-arrow {
+            transition: transform 0.3s;
+            color: #667eea;
+            font-size: 10px;
+        }
+        .item-header.active .item-arrow {
+            transform: rotate(180deg);
+        }
+        .item-content {
+            display: none;
+            padding: 16px;
+            color: #c0c0c0;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+        .item-content.active {
+            display: block;
+        }
+        .item-content p {
+            margin-bottom: 12px;
+        }
+        .item-content ul {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+        .item-content li {
+            margin-bottom: 6px;
+        }
+        .highlight {
+            background: linear-gradient(120deg, rgba(255, 234, 167, 0.3) 0%, rgba(255, 234, 167, 0.3) 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 88%;
+            padding: 0 4px;
+            font-weight: 600;
+            color: #ffeaa7;
+        }
+        .up {
+            color: #00b894;
+        }
+        .down {
+            color: #ff7675;
+        }
+        .tag {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.3);
+            color: #a0b0ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-right: 6px;
+        }
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .data-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .data-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .data-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .data-change {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .vocab-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .vocab-word {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffeaa7;
+            margin-bottom: 8px;
+        }
+        .vocab-meaning {
+            color: #a0a0a0;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .vocab-example {
+            color: #888;
+            font-size: 13px;
+            font-style: italic;
+            border-left: 3px solid #667eea;
+            padding-left: 12px;
+        }
+        .music-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .music-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .music-artist {
+            font-size: 14px;
+            color: #a0b0ff;
+            margin-bottom: 12px;
+        }
+        .music-genre {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+        .music-desc {
+            color: #c0c0c0;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        .trend-list {
+            list-style: none;
+            margin: 0;
+        }
+        .trend-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+        }
+        .trend-list li:last-child {
+            border-bottom: none;
+        }
+        .trend-rank {
+            width: 28px;
+            height: 28px;
+            background: rgba(102, 126, 234, 0.3);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .trend-rank.top {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .header {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 22px;
+            }
+            .content {
+                padding: 12px;
+            }
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>📊 2026-02-19 每日简报</h1>
+            <div class="time">星期四 | 更新于 2026-02-19 08:30</div>
+        </div>
+        
+        <div class="content">
+            <!-- 汇率与贵金属 -->
+            <div class="section active" id="section-rates">
+                <div class="section-header" onclick="toggleSection('section-rates')">
+                    <span>💱 汇率与贵金属</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="data-grid">
+                        <div class="data-card">
+                            <div class="data-label">美元兑人民币</div>
+                            <div class="data-value">6.9398</div>
+                            <div class="data-change up">+0.05%</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-label">日元兑人民币</div>
+                            <div class="data-value">0.04530</div>
+                            <div class="data-change down">-0.35%</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-label">黄金(元/克)</div>
+                            <div class="data-value">1109.00</div>
+                            <div class="data-change down">-1.20%</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-label">伦敦金价(美元/盎司)</div>
+                            <div class="data-value">4979.56</div>
+                            <div class="data-change up">+2.08%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 财经新闻 -->
+            <div class="section" id="section-finance">
+                <div class="section-header" onclick="toggleSection('section-finance')">
+                    <span>💼 财经新闻 (18条)</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">马斯克xAI发布Grok-4 Fast：高性能多模态推理模型引发行业关注</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>马斯克旗下人工智能研究公司xAI正式推出新型多模态推理模型Grok-4 Fast，支持高达2M的上下文窗口，与X平台深度整合，可解析帖子内容、提供链接及关联YouTube视频，在信息整合与分析方面表现出色。</p>
+                            <p><span class="tag">来源</span> TechWeb/新浪 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">微软和谷歌在印度新德里全球人工智能峰会上宣布新的AI投资计划</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>微软和谷歌在印度新德里举行的大型人工智能峰会上分别宣布了对人工智能计划的新投资。此次峰会聚集了政府官员、科技公司和学界领袖等，印度政府预期本次峰会将迎来25万名与会者。</p>
+                            <p><span class="tag">来源</span> 美国之音/新浪财经 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">OpenAI、谷歌和Perplexity获准直接为美国政府提供AI服务</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>OpenAI、谷歌和Perplexity已获得批准，可直接为美国政府提供AI服务。同时，根据重新制定的合作关系，微软有望在2032年前获得OpenAI总收入的20%。</p>
+                            <p><span class="tag">来源</span> 新浪财经 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">春晚带动19亿次AI互动，AI公司成春节营销主角</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>2026年春节期间，包括字节跳动旗下豆包、阿里千问APP和腾讯元宝APP在内的AI产品通过春晚合作和红包活动获得大量用户。央视春晚AI合作冠名被火山引擎拿下，阿里投入30亿元春节营销费用。</p>
+                            <p><span class="tag">来源</span> 南方+/新浪财经 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">谷歌与苹果加码生成式人工智能，进军音乐创作领域</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>谷歌宣布Gemini人工智能助手可借助Lyria 3模型生成30秒音乐曲目，支持定制歌词或纯音乐。苹果也表示用户很快能在Apple Music用AI创建播放列表，与Spotify类似产品竞争。</p>
+                            <p><span class="tag">来源</span> 新浪财经 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">李飞飞的人工智能初创公司World Labs融资10亿美元</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>人工智能先锋李飞飞创立的初创公司World Labs在新一轮融资中成功募集10亿美元，探索全新人工智能开发路径。参投方包括欧特克、Andreessen Horowitz、英伟达以及AMD。</p>
+                            <p><span class="tag">来源</span> 新浪财经 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">Meta与英伟达达成重磅芯片采购协议</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>Meta与英伟达宣布达成一项多年战略合作伙伴关系，Meta将采购并部署数百万颗英伟达芯片，涵盖Blackwell架构及下一代Rubin GPU。Meta将成为首家在数据中心单独部署英伟达Grace中央处理器的企业。</p>
+                            <p><span class="tag">来源</span> 同花顺/新浪财经 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">英伟达、AMD、苹果等国际厂商已实现开发框架对Qwen3.5的适配</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>截至2月18日，英伟达、AMD、苹果公司等国际硬件厂商已实现开发框架乃至芯片层对阿里Qwen3.5的适配；华为昇腾、摩尔线程、沐曦、海光等国产GPU也完成了适配工作。</p>
+                            <p><span class="tag">来源</span> 新浪财经 | 2026-02-18</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">上海交大研发薄膜铌酸锂高速电光引擎芯片</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>上海交通大学金贤敏、徐晓芸团队在光计算领域取得重要进展，成功研发出高性能的薄膜铌酸锂高速电光引擎芯片，通过结合高效的数据处理技术，用于光学量化计算。</p>
+                            <p><span class="tag">来源</span> 电子工程专辑 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">NASA将于2月19日开展阿耳忒弥斯2号第二次湿彩排测试</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>美国宇航局计划于2026年2月19日20:30（美东时间）在佛罗里达州肯尼迪航天中心，对阿耳忒弥斯2号任务的太空发射系统（SLS）火箭开展第二次湿彩排测试，将加注约265万升液氢和液氧，验证此前修复的液氢泄漏问题。</p>
+                            <p><span class="tag">来源</span> DoNews | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">SpaceX将重心转为先建造月球城市</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>埃隆·马斯克表示，SpaceX已将重心转移到在月球上建造一座能自我发展的城市，这项计划有望在不到10年的时间内实现。此前SpaceX表示计划在2026年底发射五艘星舰前往火星。</p>
+                            <p><span class="tag">来源</span> 德国之声 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">全新基金将向散户开放投资SpaceX与Anthropic的渠道</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>Powerlaw Corp基金正申请在纽约发售股份，这将让散户投资者可分享人工智能、国防与航天领域顶级独角兽企业的成长收益，包括SpaceX与Anthropic。该基金由阿卡迪安风投运营，管理资产规模超12亿美元。</p>
+                            <p><span class="tag">来源</span> 新浪财经 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">金价涨约2%逼近5000美元，白银暴涨5%</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>周三现货黄金从一周低点4842美元/盎司附近强势拉升，最终收报4976美元/盎司，涨幅约2%；4月美国黄金期货上涨2%，结算价逼近5010美元大关。现货白银暴涨5%至77.23美元/盎司。地缘政治风险急剧升温推动贵金属大涨。</p>
+                            <p><span class="tag">来源</span> 汇通财经/新浪财经 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">国际油价大涨超4%，美伊紧张局势升级</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>周三国际油价涨超4%，WTI原油突破65美元/桶，布伦特原油突破70美元/桶。美国副总统万斯称伊朗在核谈判中未回应美国红线，特朗普保留武力权利，市场担忧美伊开战将使石油运输受阻。</p>
+                            <p><span class="tag">来源</span> 新浪财经 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">瑞银将金价目标上调至6200美元</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>瑞银在最新报告中给出激进的金价路径判断：随着近期波动降温，金价有望重新恢复上行趋势，年中最高或上探至6200美元/盎司。这一上行预期基于地缘政治风险和美联储政策不确定性。</p>
+                            <p><span class="tag">来源</span> 新浪财经 | 2026-02-18</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 扩展国际新闻 -->
+            <div class="section" id="section-international">
+                <div class="section-header" onclick="toggleSection('section-international')">
+                    <span>🌍 扩展国际新闻 (3条)</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">特朗普称乌克兰总统泽连斯基是'独裁者'</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>美国总统特朗普在社交媒体上发文，称乌克兰总统泽连斯基是'独裁者'，并警告说他最好快点行动，否则将失去国家。此前泽连斯基批评特朗普生活在'虚假信息空间'。</p>
+                            <p><span class="tag">来源</span> 新浪财经 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">美伊核谈判进展受阻，特朗普保留武力选项</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>美国副总统万斯表示，伊朗在核谈判中未回应美国红线，特朗普保留对伊朗使用武力的权利。市场担忧美伊开战将使石油运输受阻，国际油价应声大涨超4%。</p>
+                            <p><span class="tag">来源</span> 新浪财经 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">中国央行开展5389亿元逆回购操作</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>中国人民银行2月19日公告称，为保持银行体系流动性合理充裕，当日以固定利率、数量招标方式开展了5389亿元逆回购操作，中标利率为1.50%，与此前持平。</p>
+                            <p><span class="tag">来源</span> 央行官网/新浪财经 | 2026-02-19</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 推特Trend -->
+            <div class="section" id="section-twitter">
+                <div class="section-header" onclick="toggleSection('section-twitter')">
+                    <span>📈 推特Trend</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🇺🇸 美国 Trend</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <ul class="trend-list">
+                                <li><span class="trend-rank top">1</span> Vini (Sports)</li>
+                                <li><span class="trend-rank top">2</span> Prestianni (Sports)</li>
+                                <li><span class="trend-rank top">3</span> Mourinho (Sports)</li>
+                                <li><span class="trend-rank">4</span> New Yorkers (General)</li>
+                                <li><span class="trend-rank">5</span> Ramadan Mubarak (Religion/Holiday)</li>
+                                <li><span class="trend-rank">6</span> Bobby Trees (Sports)</li>
+                                <li><span class="trend-rank">7</span> Benfica (Sports)</li>
+                                <li><span class="trend-rank">8</span> colbert (Entertainment)</li>
+                                <li><span class="trend-rank">9</span> Amber (Entertainment)</li>
+                                <li><span class="trend-rank">10</span> Purdue (Sports)</li>
+                                <li><span class="trend-rank">11</span> Ewing (Sports)</li>
+                                <li><span class="trend-rank">12</span> Otamendi (Sports)</li>
+                                <li><span class="trend-rank">13</span> Talarico (Politics)</li>
+                                <li><span class="trend-rank">14</span> #LCDLF6 (Entertainment)</li>
+                                <li><span class="trend-rank">15</span> Woodward (Sports)</li>
+                                <li><span class="trend-rank">16</span> Robert Woods (Sports)</li>
+                                <li><span class="trend-rank">17</span> Alysa (Sports)</li>
+                                <li><span class="trend-rank">18</span> Jesse Jackson (Politics)</li>
+                                <li><span class="trend-rank">19</span> Mbappe (Sports)</li>
+                                <li><span class="trend-rank">20</span> Crockett (Politics)</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🇯🇵 日本 Trend</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <ul class="trend-list">
+                                <li><span class="trend-rank top">1</span> 百音ちゃん (Sports)</li>
+                                <li><span class="trend-rank top">2</span> #マックのクリームブリュレドーナツ新発売 (Food)</li>
+                                <li><span class="trend-rank top">3</span> 着せ替え人形 (Entertainment)</li>
+                                <li><span class="trend-rank">4</span> かおちゃん (Sports)</li>
+                                <li><span class="trend-rank">5</span> 亜美ちゃん (Sports)</li>
+                                <li><span class="trend-rank">6</span> #LINEマンガポイ活 (Entertainment)</li>
+                                <li><span class="trend-rank">7</span> 週の真ん中 (General)</li>
+                                <li><span class="trend-rank">8</span> #HappyJHOPEday (Entertainment)</li>
+                                <li><span class="trend-rank">9</span> アンバー (Entertainment)</li>
+                                <li><span class="trend-rank">10</span> 安眠の日 (Holiday)</li>
+                                <li><span class="trend-rank">11</span> #星野源ANN (Entertainment)</li>
+                                <li><span class="trend-rank">12</span> 日本女子 (Sports)</li>
+                                <li><span class="trend-rank">13</span> #タイムレスマン (Entertainment)</li>
+                                <li><span class="trend-rank">14</span> 坂本花織 (Sports)</li>
+                                <li><span class="trend-rank">15</span> ソニック (Entertainment)</li>
+                                <li><span class="trend-rank">16</span> トリプルアクセル (Sports)</li>
+                                <li><span class="trend-rank">17</span> 坂本選手 (Sports)</li>
+                                <li><span class="trend-rank">18</span> 中井選手 (Sports)</li>
+                                <li><span class="trend-rank">19</span> 女子フィギュア (Sports)</li>
+                                <li><span class="trend-rank">20</span> 最終滑走 (Sports)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 百度热搜 -->
+            <div class="section" id="section-hotsearch">
+                <div class="section-header" onclick="toggleSection('section-hotsearch')">
+                    <span>🔥 百度热搜榜</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <ul class="trend-list">
+                        <li><span class="trend-rank top">1</span> 最深切的牵挂 (790.4万)</li>
+                        <li><span class="trend-rank top">2</span> 一场极致的气温震荡即将登场 (761.6万)</li>
+                        <li><span class="trend-rank top">3</span> 99.9%的人都选错最佳观影位置了 (752.0万)</li>
+                        <li><span class="trend-rank">4</span> 湖北恩施一家52口人自办"春晚" (742.4万)</li>
+                        <li><span class="trend-rank">5</span> 初三一定记得睡懒觉 (733.4万)</li>
+                        <li><span class="trend-rank">6</span> 海口至上海机票高达11560元 (723.8万)</li>
+                        <li><span class="trend-rank">7</span> 大年初二大型"告状"现场 (714.3万)</li>
+                        <li><span class="trend-rank">8</span> 众星祝贺苏翊鸣夺金 (704.6万)</li>
+                        <li><span class="trend-rank">9</span> 中领馆再次提醒近期避免前往日本 (694.4万)</li>
+                        <li><span class="trend-rank">10</span> 吃太油喝茶解腻没科学道理 (685.8万)</li>
+                        <li><span class="trend-rank">11</span> 佟丽娅祝贺苏翊鸣夺冠 (676.1万)</li>
+                        <li><span class="trend-rank">12</span> 打麻将打到抽搐口吐白沫？专家提醒 (665.9万)</li>
+                        <li><span class="trend-rank">13</span> 扛楼小伙回应年入35万：互联网赚20万 (656.5万)</li>
+                        <li><span class="trend-rank">14</span> 徐梦桃大喊我怎么跳这么漂亮 (647.1万)</li>
+                        <li><span class="trend-rank">15</span> 深圳花市现反向拍卖 价格越喊越低 (636.8万)</li>
+                        <li><span class="trend-rank">16</span> 春节"新三样"卖爆了 (628.2万)</li>
+                        <li><span class="trend-rank">17</span> 中国队两小时内连夺两金 (617.7万)</li>
+                        <li><span class="trend-rank">18</span> "5年前还是科幻小说里的情节" (608.1万)</li>
+                        <li><span class="trend-rank">19</span> 苏翊鸣在领奖台上眼泪夺眶而出 (599.6万)</li>
+                        <li><span class="trend-rank">20</span> 苏翊鸣22岁生日当天斩获冠军 (589.6万)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 游戏新闻 -->
+            <div class="section" id="section-gaming">
+                <div class="section-header" onclick="toggleSection('section-gaming')">
+                    <span>🎮 游戏新闻 (9条)</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">《Demon Tides》今日发售</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>《Demon Turf》系列最新作今日在Steam平台发售。恶魔少女Beebz要夺取女王宝座！本作将系列标志性的2D角色+3D场景升级为全3D呈现，动作更流畅、世界更广阔。包含变身系统、海洋开放世界+移动基地探索、在线幽灵竞速+全球涂鸦共享等功能。</p>
+                            <p><span class="tag">来源</span> 机核网</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">《炽焰风暴》现已上线Steam</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>TERARIN GAMES十周年纪念作《炽焰风暴》（导弹舞者系列）今日发布。这是一款街机风格的垂直卷轴射击游戏，采用赛博朋克风格的像素级画面，超过20个独特BOSS将接连登场。支持两种音乐模式（原声或芯片音乐）和在线排行榜全球对战。</p>
+                            <p><span class="tag">来源</span> 17173</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">《死亡呼啸》主机版今日发售</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>将类魂元素与卡牌构筑玩法相结合的独立游戏《死亡呼啸》今日登陆PS5、Switch 2、Xbox Series X|S平台。游戏讲述了一个充满哀伤的悲壮故事，此前已于2025年12月9日发售PC版。</p>
+                            <p><span class="tag">来源</span> 游民星空</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">《Warframe》手游安卓版今日全球上线</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>Digital Extremes正式宣布，《Warframe》安卓版于2026年2月19日凌晨3点向全球玩家开放。这款运营已十二年的科幻游戏实现了真正意义上的全平台覆盖，标志着服务型游戏通过持续更新与平台扩张保持活力的成功案例。</p>
+                            <p><span class="tag">来源</span> TapTap</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">《明日方舟：终末地》全球流水突破12亿元</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>鹰角网络旗下新作《明日方舟：终末地》全球多端上线两周后，全平台累计流水已突破12亿元人民币。数据显示，国内市场PC端流水占比接近60%，海外市场PC与PS平台合计流水占比达到70%，验证了多端发行策略的成功。</p>
+                            <p><span class="tag">来源</span> 凤凰网</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">《永劫无间》手游联动《守望先锋》</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>《永劫无间》手游于2月15日进行不停服维护，开启与《守望先锋》的联动活动，全新玩法【暗域狂潮】上线。</p>
+                            <p><span class="tag">来源</span> TapTap</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">《守望先锋》2026年计划推出十位新英雄</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>暴雪宣布《守望先锋》将在2026年推出总计十名新英雄，目前已一次性放出五个新英雄：金驭、埃姆雷、瑞稀、安燃和飞天猫。制作团队表示已将单个英雄开发周期从八九个月缩短到四五个月。同时推出贯穿全年6个赛季的剧情篇章《黑爪之治》。</p>
+                            <p><span class="tag">来源</span> 网易号/游戏葡萄</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">2026年游戏产业有望延续良好态势</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>2025年国内游戏市场实际销售收入、用户规模都创下历史新高。在爆款产品继续放量、AI技术进一步成熟、游戏版号稳定发放的大背景下，2026年的游戏产业在政策、技术、产品层面均有望延续去年的良好态势。</p>
+                            <p><span class="tag">来源</span> 新浪财经</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">《光与影：33号远征队》开发团队获法国艺术与文学骑士勋章</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>法国游戏开发团队Sandfall Interactive因其作品《光与影：33号远征队》的杰出贡献，被法国文化部授予艺术与文学骑士勋章。此前获此荣誉的包括任天堂传奇制作人宫本茂。</p>
+                            <p><span class="tag">来源</span> 凤凰网</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 每日一曲 -->
+            <div class="section" id="section-music">
+                <div class="section-header" onclick="toggleSection('section-music')">
+                    <span>🎵 每日一曲</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="music-card">
+                        <div class="music-title">ミスクレイジースピード (Miss Crazy Speed / 疯小姐极速)</div>
+                        <div class="music-artist">cosMo@暴走P feat. 初音ミク</div>
+                        <div class="music-genre">Vocaloid / 高速电子舞曲 / 街机音游曲</div>
+                        <div class="music-desc">
+                            2026年2月刚刚发布的全新Vocaloid力作！由传奇P主cosMo@暴走P为街机音游《Polaris Code》与《SOUND VOLTEX ∇》联名创作。歌曲以BPM 220的超高速节奏著称，却被戏称为「中速」，充分展现了暴走P标志性的「优雅与暴走并存」的混沌世界观。千金小姐口吻的机智歌词与初音未来可爱的歌声形成绝妙反差，是一首让人欲罢不能的刺激之作。
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 行业英语词汇 -->
+            <div class="section" id="section-vocab">
+                <div class="section-header" onclick="toggleSection('section-vocab')">
+                    <span>📚 今日5个行业英语词汇</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="vocab-item">
+                        <div class="vocab-word">synergy /ˈsɪnədʒi/</div>
+                        <div class="vocab-meaning">协同效应；增效作用</div>
+                        <div class="vocab-example">The merger is expected to generate significant cost synergies through the consolidation of operations.<br>预计此次合并将通过业务整合产生显著的成本协同效应。</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">leverage /ˈlevərɪdʒ/</div>
+                        <div class="vocab-meaning">杠杆；举债经营；充分利用</div>
+                        <div class="vocab-example">The private equity firm plans to leverage debt to finance the acquisition.<br>这家私募股权公司计划利用债务融资来进行收购。</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">disruptive /dɪsˈrʌptɪv/</div>
+                        <div class="vocab-meaning">颠覆性的；破坏性的</div>
+                        <div class="vocab-example">Artificial intelligence is considered a disruptive technology that will transform multiple industries.<br>人工智能被认为是一项颠覆性技术，将改变多个行业。</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">stakeholder /ˈsteɪkhoʊldər/</div>
+                        <div class="vocab-meaning">利益相关者；利益攸关方</div>
+                        <div class="vocab-example">The board must consider the interests of all stakeholders, including employees, customers, and shareholders.<br>董事会必须考虑所有利益相关者的利益，包括员工、客户和股东。</div>
+                    </div>
+                    <div class="vocab-item">
+                        <div class="vocab-word">scalability /ˌskeɪləˈbɪləti/</div>
+                        <div class="vocab-meaning">可扩展性；可伸缩性</div>
+                        <div class="vocab-example">Cloud computing offers superior scalability compared to traditional on-premise infrastructure.<br>与传统本地基础设施相比，云计算提供了卓越的可扩展性。</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            💡 点击标题展开/收起 | 每日更新于上午9:00 (GMT+8)
+        </div>
+    </div>
+    
+    <script>
+        function toggleSection(id) {
+            const section = document.getElementById(id);
+            if (section) {
+                section.classList.toggle('active');
+            }
+        }
+        
+        function toggleItem(header) {
+            if (header) {
+                const content = header.nextElementSibling;
+                if (content) {
+                    header.classList.toggle('active');
+                    content.classList.toggle('active');
+                }
+            }
+        }
+        
+        // 确保第一个分类默认展开
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstSection = document.querySelector('.section');
+            if (firstSection) {
+                firstSection.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
