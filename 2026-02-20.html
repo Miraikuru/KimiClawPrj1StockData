@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-02-20 每日简报</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 { font-size: 26px; margin-bottom: 10px; font-weight: 600; }
+        .header .time { opacity: 0.9; font-size: 14px; }
+        .content { padding: 20px; }
+        .section {
+            margin-bottom: 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .section-header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+            color: white;
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        .section-header .arrow { transition: transform 0.3s; font-size: 12px; }
+        .section.active .section-header .arrow { transform: rotate(180deg); }
+        .section-content { display: none; padding: 16px; }
+        .section.active .section-content { display: block; }
+        .item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .item-header {
+            padding: 14px 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .item-header:hover { background: rgba(102, 126, 234, 0.1); }
+        .item-title { font-weight: 500; color: #f0f0f0; font-size: 15px; }
+        .item-arrow { transition: transform 0.3s; color: #667eea; font-size: 10px; }
+        .item-content {
+            display: none;
+            padding: 16px;
+            color: #c0c0c0;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+        .item-content p { margin-bottom: 12px; }
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .data-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .data-label { font-size: 12px; color: #888; margin-bottom: 8px; }
+        .data-value { font-size: 20px; font-weight: 600; color: #fff; }
+        .data-change { font-size: 12px; margin-top: 4px; }
+        .up { color: #00b894; }
+        .down { color: #ff7675; }
+        .tag {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.3);
+            color: #a0b0ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-right: 6px;
+        }
+        .trend-list { list-style: none; margin: 0; }
+        .trend-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+        }
+        .trend-list li:last-child { border-bottom: none; }
+        .trend-rank {
+            width: 28px;
+            height: 28px;
+            background: rgba(102, 126, 234, 0.3);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .trend-rank.top { background: linear-gradient(135deg, #ff6b6b, #ee5a6f); }
+        .vocab-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .vocab-word { font-size: 18px; font-weight: 600; color: #ffeaa7; margin-bottom: 8px; }
+        .vocab-meaning { color: #a0a0a0; font-size: 14px; margin-bottom: 8px; }
+        .vocab-example {
+            color: #888;
+            font-size: 13px;
+            font-style: italic;
+            border-left: 3px solid #667eea;
+            padding-left: 12px;
+        }
+        .music-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .music-title { font-size: 20px; font-weight: 600; margin-bottom: 8px; color: #fff; }
+        .music-artist { font-size: 14px; color: #a0b0ff; margin-bottom: 12px; }
+        .music-genre {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+        .music-desc { color: #c0c0c0; line-height: 1.6; font-size: 14px; }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 2026-02-20 每日简报</h1>
+            <div class="time">星期五 | 更新于 2026-02-20 08:30</div>
+        </div>
+        
+        <div class="content">
+            <div class="section active" id="section-rates">
+                <div class="section-header" onclick="toggleSection('section-rates')">
+                    <span>💱 汇率与贵金属</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="data-grid">
+                        <div class="data-card">
+                            <div class="data-label">美元兑人民币</div>
+                            <div class="data-value">6.9398</div>
+                            <div class="data-change up">+0.59%</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-label">日元兑人民币</div>
+                            <div class="data-value">0.0453</div>
+                            <div class="data-change up">+1.41%</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-label">黄金(元/克)</div>
+                            <div class="data-value">1108.92</div>
+                            <div class="data-change down">-1.21%</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-label">伦敦金价(美元/盎司)</div>
+                            <div class="data-value">5015.50</div>
+                            <div class="data-change up">+0.12%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section" id="section-finance">
+                <div class="section-header" onclick="toggleSection('section-finance')">
+                    <span>💼 财经新闻 (23条)</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">AI</span>OpenAI获千亿级战略投资，估值突破8500亿美元</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>OpenAI即将完成新一轮融资，融资额有望突破1000亿美元，公司整体估值可能超过8500亿美元，较去年底飙涨70%。本轮融资由软银领投300亿美元，英伟达、微软等科技巨头也将参与投资。</p>
+                            <p><strong>来源：</strong>新浪财经 | 2026-02-20</p>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">AI</span>印度AI基建投资爆发，信实与阿达尼集团投资2100亿美元</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>印度信实工业宣布将在未来七年投资1100亿美元推进AI数据中心建设，阿达尼集团也宣布将在2035年前投资1000亿美元建设大型数据中心。仅这两家公司，未来在AI数据中心领域的投资总额就将达到2100亿美元。</p>
+                            <p><strong>来源：</strong>新浪财经 | 2026-02-19</p>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">AI</span>Anthropic完成300亿美元融资，估值升至3800亿美元</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>AI公司Anthropic完成300亿美元融资交易，投后估值达3800亿美元，进一步增强其与OpenAI竞争的实力。本轮融资由新加坡政府投资公司和Coatue Management领投，年化收入升至140亿美元。</p>
+                            <p><strong>来源：</strong>新浪财经 | 2026-02-13</p>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">硬件</span>三星HBM4芯片开始量产并向客户发货</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>三星电子已开始向客户交付其最新款高带宽存储芯片HBM4，成为首家能够大规模生产并交付HBM4芯片的公司。与上一代产品相比，采用新型HBM4芯片的单个堆栈总内存带宽提升了2.7倍。</p>
+                            <p><strong>来源：</strong>财联社 | 2026-02-12</p>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">软件</span>亚马逊超越沃尔玛成为全球营收最高公司</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>亚马逊正式超越沃尔玛，成为全球销售额最高的公司，结束了沃尔玛连续13年的榜首地位。2025年亚马逊销售额达7170亿美元，沃尔玛为7130亿美元。亚马逊凭借云计算、广告等业务增长实现反超。</p>
+                            <p><strong>来源：</strong>新浪财经 | 2026-02-20</p>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">大宗商品</span>黄金、原油强势反弹，金价重新站上5000美元</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>受美伊紧张局势升级影响，黄金、原油延续反弹。金价重新站上5000美元/盎司关口，伦敦现货金收报5015美元/盎司，年内涨幅超过16%。布伦特原油期货主力合约价格站上70美元/桶，年内涨幅接近17%。</p>
+                            <p><strong>来源：</strong>证券时报/新浪财经 | 2026-02-19</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section" id="section-international">
+                <div class="section-header" onclick="toggleSection('section-international')">
+                    <span>🌍 国际新闻</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">韩国前总统尹锡悦被判处无期徒刑</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>韩国首尔中央地方法院宣布，前总统尹锡悦内乱头目罪罪名成立，判处其无期徒刑。同案被告、前国防部长官金龙显被判处有期徒刑30年。</p>
+                            <p><strong>来源：</strong>央视新闻 | 2026-02-20</p>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">英国前王子安德鲁因涉嫌不当行为被捕</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>英国国王查尔斯三世的弟弟安德鲁因涉嫌公职期间行为不当被捕后获释，目前仍在接受调查。这是自17世纪以来英国王室成员首次被捕，指控源于美国公布的爱泼斯坦相关文件。</p>
+                            <p><strong>来源：</strong>新浪财经 | 2026-02-20</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section" id="section-twitter">
+                <div class="section-header" onclick="toggleSection('section-twitter')">
+                    <span>📈 推特Trend</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🇺🇸 美国 Trend</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <ul class="trend-list">
+                                <li><span class="trend-rank top">1</span>Alysa Liu</li>
+                                <li><span class="trend-rank top">2</span>MEGAN KELLER</li>
+                                <li><span class="trend-rank top">3</span>Canada</li>
+                                <li><span class="trend-rank">4</span>Bears</li>
+                                <li><span class="trend-rank">5</span>#USAHockey</li>
+                                <li><span class="trend-rank">6</span>Kaori</li>
+                                <li><span class="trend-rank">7</span>Hilary Knight</li>
+                                <li><span class="trend-rank">8</span>#Olympics2026</li>
+                                <li><span class="trend-rank">9</span>Gold</li>
+                                <li><span class="trend-rank">10</span>Sony</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🇯🇵 日本 Trend</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <ul class="trend-list">
+                                <li><span class="trend-rank top">1</span>かおちゃん</li>
+                                <li><span class="trend-rank top">2</span>百音ちゃん</li>
+                                <li><span class="trend-rank top">3</span>アリサリウ</li>
+                                <li><span class="trend-rank">4</span>#フィギュアスケート女子フリー</li>
+                                <li><span class="trend-rank">5</span>坂本さん</li>
+                                <li><span class="trend-rank">6</span>中井さん</li>
+                                <li><span class="trend-rank">7</span>千葉選手</li>
+                                <li><span class="trend-rank">8</span>トリプルアクセル</li>
+                                <li><span class="trend-rank">9</span>#LINEマンガで読むだけポイ活</li>
+                                <li><span class="trend-rank">10</span>コンビネーション</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section" id="section-hotsearch">
+                <div class="section-header" onclick="toggleSection('section-hotsearch')">
+                    <span>🔥 百度热搜榜</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <ul class="trend-list">
+                        <li><span class="trend-rank top">1</span>民生冷暖系心间</li>
+                        <li><span class="trend-rank top">2</span>冰雪白 冬奥金 中国红</li>
+                        <li><span class="trend-rank top">3</span>当代年轻人包饺子主打一个松弛</li>
+                        <li><span class="trend-rank">4</span>《镖人》票房逆跌</li>
+                        <li><span class="trend-rank">5</span>家里最没用的吵醒家里最受宠的</li>
+                        <li><span class="trend-rank">6</span>大年初四要扔穷？到底怎么扔</li>
+                        <li><span class="trend-rank">7</span>强烈建议：春节餐桌多一道菜</li>
+                        <li><span class="trend-rank">8</span>美军集结近23年来最大空中兵力</li>
+                        <li><span class="trend-rank">9</span>嗑瓜子一时爽 贪多必伤身</li>
+                        <li><span class="trend-rank">10</span>这些年货食品谣言一次说清</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section" id="section-gaming">
+                <div class="section-header" onclick="toggleSection('section-gaming')">
+                    <span>🎮 游戏新闻 (12条)</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">PC</span>Mewgenics正式上线：猫咪育种战术RPG历经14年开发终于发售</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>由《以撒的结合》创作者Edmund McMillen开发的猫咪育种战术RPG《Mewgenics》于2月10日正式发售。游戏设定在虚构的Boon County，玩家需要培育变异猫咪战队进行回合制战斗，拥有超过1000种能力和多个职业，预计游戏时长超过200小时。</p>
+                            <p><strong>来源：</strong>PC Gamer / GameSpot</p>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">手游</span>Star Sailors将于2月24日全球上线</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>Com2uS开发的回合制奇幻RPG《Star Sailors》确认将于2月24日全球上线。游戏采用高质量卡通渲染和动漫风格视觉效果，玩家需要寻找传说中的遗物来重建人类王国，支持技能链和团队协同战斗系统。</p>
+                            <p><strong>来源：</strong>GachaRevenue</p>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">行业</span>游戏行业2026年开局艰难：32轮裁员影响超2000人</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>据游戏行业就业倡导者Amir Satvat统计，2026年初游戏行业已发生32轮裁员，影响超过2015个岗位。其中51%发生在北美，25%在欧洲，加利福尼亚州占全球裁员的23%。全年预计裁员总数可能达到10138人，介于2023年（10500人）和2025年（9197人）之间。</p>
+                            <p><strong>来源：</strong>GamesBeat / LinkedIn</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section" id="section-music">
+                <div class="section-header" onclick="toggleSection('section-music')">
+                    <span>🎵 每日一曲</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="music-card">
+                        <div class="music-title">メズマライザー (Mesmerizer)</div>
+                        <div class="music-artist">サツキ (32ki) feat. 初音ミク & 重音テト</div>
+                        <div class="music-genre">Vocaloid / EDM / Future Bass</div>
+                        <div class="music-desc">
+                            这首2024年爆红的Vocaloid歌曲以极具感染力的旋律和中毒性的节奏著称，融合了Future Bass和EDM元素。初音ミク与重音テト的双声线搭配，配合洗脑般的副歌，是近期Vocaloid圈的现象级作品，YouTube播放量已突破千万。
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section" id="section-vocab">
+                <div class="section-header" onclick="toggleSection('section-vocab')">
+                    <span>📚 今日5个行业英语词汇</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="vocab-item">
+                        <div class="vocab-word">algorithm /ˈælɡərɪðəm/</div>
+                        <div class="vocab-meaning">算法；计算程序</div>
+                        <div class="vocab-example">The recommendation system uses a complex algorithm to predict user preferences. (推荐系统使用复杂的算法来预测用户偏好)</div>
+                    </div>
+                    
+                    <div class="vocab-item">
+                        <div class="vocab-word">leverage /ˈlevərɪdʒ/</div>
+                        <div class="vocab-meaning">杠杆作用；利用；举债经营</div>
+                        <div class="vocab-example">The firm plans to leverage its existing customer base to launch new products. (公司计划利用现有客户群来推出新产品)</div>
+                    </div>
+                    
+                    <div class="vocab-item">
+                        <div class="vocab-word">synergy /ˈsɪnədʒi/</div>
+                        <div class="vocab-meaning">协同效应；协同作用</div>
+                        <div class="vocab-example">The merger is expected to create significant cost synergies across both organizations. (此次合并预计将在两个组织间产生显著的成本协同效应)</div>
+                    </div>
+                    
+                    <div class="vocab-item">
+                        <div class="vocab-word">disruptive /dɪsˈrʌptɪv/</div>
+                        <div class="vocab-meaning">颠覆性的；破坏性的</div>
+                        <div class="vocab-example">The startup introduced a disruptive technology that changed the entire industry landscape. (这家初创公司推出了颠覆性技术，改变了整个行业格局)</div>
+                    </div>
+                    
+                    <div class="vocab-item">
+                        <div class="vocab-word">liquidity /lɪˈkwɪdəti/</div>
+                        <div class="vocab-meaning">流动性；流动资金</div>
+                        <div class="vocab-example">The central bank injected liquidity into the market to stabilize financial conditions. (央行向市场注入流动性以稳定金融环境)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            💡 点击标题展开/收起 | 每日更新于上午9:00 (GMT+8)
+        </div>
+    </div>
+    
+    <script>
+        function toggleSection(id) {
+            const section = document.getElementById(id);
+            if (section) {
+                section.classList.toggle('active');
+            }
+        }
+        
+        function toggleItem(header) {
+            if (header) {
+                const content = header.nextElementSibling;
+                if (content) {
+                    header.classList.toggle('active');
+                    content.style.display = content.style.display === 'block' ? 'none' : 'block';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
