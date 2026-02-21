@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-02-21 每日简报</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 26px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .header .time {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .section-header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+            color: white;
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .section-header:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+        }
+        .section-header .arrow {
+            transition: transform 0.3s;
+            font-size: 12px;
+        }
+        .section.active .section-header .arrow {
+            transform: rotate(180deg);
+        }
+        .section-content {
+            display: none;
+            padding: 16px;
+        }
+        .section.active .section-content {
+            display: block;
+        }
+        .item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .item-header {
+            padding: 14px 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        .item-header:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+        .item-header.active {
+            background: rgba(102, 126, 234, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .item-title {
+            font-weight: 500;
+            color: #f0f0f0;
+            font-size: 15px;
+        }
+        .item-arrow {
+            transition: transform 0.3s;
+            color: #667eea;
+            font-size: 10px;
+        }
+        .item-header.active .item-arrow {
+            transform: rotate(180deg);
+        }
+        .item-content {
+            display: none;
+            padding: 16px;
+            color: #c0c0c0;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+        .item-content.active {
+            display: block;
+        }
+        .item-content p {
+            margin-bottom: 12px;
+        }
+        .item-content ul {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+        .item-content li {
+            margin-bottom: 6px;
+        }
+        .highlight {
+            background: linear-gradient(120deg, rgba(255, 234, 167, 0.3) 0%, rgba(255, 234, 167, 0.3) 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 88%;
+            padding: 0 4px;
+            font-weight: 600;
+            color: #ffeaa7;
+        }
+        .up {
+            color: #00b894;
+        }
+        .down {
+            color: #ff7675;
+        }
+        .tag {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.3);
+            color: #a0b0ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-right: 6px;
+        }
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .data-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .data-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .data-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .data-change {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .vocab-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .vocab-word {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffeaa7;
+            margin-bottom: 8px;
+        }
+        .vocab-meaning {
+            color: #a0a0a0;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .vocab-example {
+            color: #888;
+            font-size: 13px;
+            font-style: italic;
+            border-left: 3px solid #667eea;
+            padding-left: 12px;
+        }
+        .music-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .music-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .music-artist {
+            font-size: 14px;
+            color: #a0b0ff;
+            margin-bottom: 12px;
+        }
+        .music-genre {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+        .music-desc {
+            color: #c0c0c0;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        .trend-list {
+            list-style: none;
+            margin: 0;
+        }
+        .trend-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+        }
+        .trend-list li:last-child {
+            border-bottom: none;
+        }
+        .trend-rank {
+            width: 28px;
+            height: 28px;
+            background: rgba(102, 126, 234, 0.3);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .trend-rank.top {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .header {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 22px;
+            }
+            .content {
+                padding: 12px;
+            }
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>📊 2026-02-21 每日简报</h1>
+            <div class="time">星期六 | 更新于 08:33</div>
+        </div>
+        
+        <div class="content">
+            <!-- 汇率与贵金属 -->
+            <div class="section active" id="section-rates">
+                <div class="section-header" onclick="toggleSection('section-rates')">
+                    <span>💱 汇率与贵金属</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="data-grid">
+                        <div class="data-card">
+                            <div class="data-label">美元兑人民币</div>
+                            <div class="data-value">6.9018</div>
+                            <div class="data-change down">-0.15%</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-label">日元兑人民币</div>
+                            <div class="data-value">0.04456</div>
+                            <div class="data-change down">-0.09%</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-label">黄金(元/克)</div>
+                            <div class="data-value">1108.50</div>
+                            <div class="data-change down">-1.34%</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-label">伦敦金价(美元/盎司)</div>
+                            <div class="data-value">5098.85</div>
+                            <div class="data-change up">+2.06%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 财经新闻 -->
+            <div class="section" id="section-finance">
+                <div class="section-header" onclick="toggleSection('section-finance')">
+                    <span>💼 财经新闻 (18条)</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">AI人工智能</span>谷歌发布Gemini 3.1 Pro，推理性能翻倍</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>谷歌公司宣布推出新一代人工智能模型Gemini 3.1 Pro，在推理性能领域实现突破性进展。该模型在ARC-AGI-2基准测试中取得77.1%的优异成绩，较前代产品性能提升近一倍。新模型主打多源数据综合与复杂任务拆解，在逻辑推理、代码能力方面表现突出。</p>
+                            <p><strong>来源：</strong>新浪科技/华尔街见闻 | <strong>发布时间：</strong>2026-02-20</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">AI人工智能</span>字节跳动发布Seedance 2.0视频生成模型</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>字节跳动正式发布豆包视频生成模型Seedance 2.0，该模型在运动场景下的生成可用率达到业界SOTA水平，在人物动作建模方面有着自然连贯、遵循现实世界运动规律的显著优势。模型已全面接入豆包和即梦产品，并上线火山方舟体验中心。</p>
+                            <p><strong>来源：</strong>科创板日报/财联社 | <strong>发布时间：</strong>2026-02-12</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">AI人工智能</span>智谱发布新一代旗舰模型GLM-5</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>智谱上线并开源GLM-5，其在Coding与Agent能力上取得开源SOTA表现，在真实编程场景的使用体感逼近Claude Opus4.5。模型参数规模从355B扩展至744B，首次集成DeepSeek Sparse Attention，大幅降低模型部署成本。</p>
+                            <p><strong>来源：</strong>财联社 | <strong>发布时间：</strong>2026-02-12</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">软件互联网</span>AI大模型春节档：大厂红包大战超45亿元</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>春节期间，腾讯元宝发放10亿元现金红包，百度文心助手抛出5亿元红包福利，阿里千问启动30亿元"春节请客计划"，字节跳动通过央视春晚送出超过10万份科技好礼。这场史上最大规模"AI红包雨"标志着AI应用正在从工具属性向高频服务入口跃迁。</p>
+                            <p><strong>来源：</strong>科学网 | <strong>发布时间：</strong>2026-02-20</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">软件互联网</span>OpenAI即将完成超1000亿美元新一轮融资</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>OpenAI即将完成新一轮融资，融资金额可能超过1000亿美元，为公司提供额外资金用于开发人工智能工具。随着OpenAI准备投入数万亿美元进行基础设施建设，公司总估值可能超过8500亿美元。本轮融资主要来自亚马逊、软银集团、英伟达和微软等战略投资者。</p>
+                            <p><strong>来源：</strong>华尔街见闻/网易财经 | <strong>发布时间：</strong>2026-02-21</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">软件互联网</span>谷歌探索扩大AI芯片市场以对抗英伟达</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>谷歌正探索扩大人工智能芯片市场新方式以对抗英伟达。其TPU芯片获更多AI工作负载采用，谷歌加大对数据中心合作伙伴网络的财务支持，洽谈向云计算初创公司Fluidstack投资约1亿美元。谷歌CEO透露谷歌云积压订单已翻倍至2400亿美元。</p>
+                            <p><strong>来源：</strong>新浪财经/华尔街见闻 | <strong>发布时间：</strong>2026-02-21</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">硬件半导体</span>半导体行业掀涨价风暴，超20家企业发涨价函</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>进入2026年以来，全球半导体产业链迎来新一轮全面涨价潮。从存储芯片到MCU，从晶圆代工到封装测试，从被动元件到连接器，涨价信号此起彼伏。目前已有超过20家国内外半导体企业正式发布涨价函，涨幅从5%到80%不等，核心驱动力来自AI需求爆发引发的供需失衡。</p>
+                            <p><strong>来源：</strong>国际电子商情/esmchina.com | <strong>发布时间：</strong>2026-02-11</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">硬件半导体</span>深圳锁定AI芯片为产业突破口，产值突破3000亿元</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>深圳半导体产业2025年产值首次突破3000亿元大关，"十四五"期间年均复合增长率达10.8%。深圳印发《"人工智能+"先进制造业行动计划》，明确提出以AI芯片为突破口做强半导体产业，面向AI手机、AI眼镜、智能机器人等终端需求研发高性能专用SoC主控芯片。</p>
+                            <p><strong>来源：</strong>界面新闻 | <strong>发布时间：</strong>2026-02-14</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">硬件半导体</span>存储芯片领涨，三星股价创新高</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>2026年2月19日，韩国存储芯片巨头三星电子股价再度创下历史新高，盘中一度上涨逾5%，最高触及190900韩元，今年以来累计涨幅已近50%。AI与数据中心需求持续加剧全球存储器供需失衡，预估整体DRAM合约价将上涨90%-95%，NAND Flash合约价上涨55%-60%。</p>
+                            <p><strong>来源：</strong>中国经营网 | <strong>发布时间：</strong>2026-02-20</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">航天太空</span>我国成功发射可重复使用试验航天器</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>2月7日，我国在酒泉卫星发射中心使用长征二号F运载火箭，成功发射一型可重复使用试验航天器。试验航天器将按计划开展可重复使用试验航天器技术验证，为和平利用太空提供技术支撑。随着技术验证的成功，商业航天有望步入高频发射常态化阶段。</p>
+                            <p><strong>来源：</strong>新华社/新浪财经 | <strong>发布时间：</strong>2026-02-07</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">航天太空</span>长征十号运载火箭低空演示验证成功</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>2月11日，我国在文昌航天发射场成功实施长征十号运载火箭系统低空演示验证与梦舟载人飞船系统最大动压逃逸飞行试验，取得重要阶段性突破。试验成功验证了火箭回收技术，火箭一级准确溅落于预定海域。我国计划在2030年前实现载人登陆月球。</p>
+                            <p><strong>来源：</strong>央视新闻/财联社 | <strong>发布时间：</strong>2026-02-11</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">航天太空</span>SpaceX或推迟火星计划，优先执行登月任务</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>据《华尔街日报》报道，SpaceX已推迟原定于2026年执行的火星任务，转而将重点放在面向NASA的登月任务上。SpaceX正在以2027年3月为目标尝试实施一次无人登月。同时，SpaceX宣布收购马斯克旗下xAI，合并后的公司估值达到1.25万亿美元。</p>
+                            <p><strong>来源：</strong>华尔街日报/新浪财经 | <strong>发布时间：</strong>2026-02-07</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">贵金属大宗商品</span>黄金突破5100美元，白银大涨近9%</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>受地缘政治紧张局势推动，2月20日国际贵金属价格大幅上涨。现货黄金涨2.15%报5104.90美元/盎司，本周累计上涨1.27%；现货白银突破84美元/盎司，日内涨幅达7.21%。摩根大通预计金价将在2026年底前升至每盎司6300美元，2027年进一步上行至约6600美元。</p>
+                            <p><strong>来源：</strong>新浪财经/华尔街见闻 | <strong>发布时间：</strong>2026-02-21</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">贵金属大宗商品</span>原油强势反弹，布伦特原油站上70美元</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>2月19日亚洲交易时段，国际原油延续反弹，布伦特原油期货主力合约价格站上70美元/桶，年内涨幅接近17%。斯洛伐克因乌克兰中断俄罗斯石油过境运输宣布进入国家石油紧急状态，中东局势紧张支撑油价。</p>
+                            <p><strong>来源：</strong>新浪财经/证券时报 | <strong>发布时间：</strong>2026-02-19</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">贵金属大宗商品</span>大宗商品牛市持续，机构看好硬资产配置</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>2025年黄金、白银持续上涨开启了一轮大宗商品的牛市。展望2026年，高盛认为投资者持续向硬资产进行分散化配置将显著提振大宗商品市场。中泰证券认为，由于供需缺口未弥合，大宗商品板块企稳后仍将上行，支撑上涨的核心逻辑包括地缘政治博弈、AI+工业升级带来的刚性需求等。</p>
+                            <p><strong>来源：</strong>中国能源网/新浪财经 | <strong>发布时间：</strong>2026-02-20</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">国内外时事</span>美国最高法院驳回特朗普全球关税政策</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>美国最高法院于2月20日裁定，特朗普政府依据《国际紧急经济权力法》实施的大规模关税措施缺乏明确法律授权。这意味着特朗普政府目前实行的大部分关税将被迫中止。经济学家估算相关关税已征超1750亿美元。特朗普表示将依据《1974年贸易法》第122条对全球商品加征10%关税。</p>
+                            <p><strong>来源：</strong>新浪财经/华尔街见闻 | <strong>发布时间：</strong>2026-02-21</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">国内外时事</span>特朗普考虑对伊朗进行有限军事打击</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>美国总统特朗普表示，他正在考虑对伊朗进行"初步的有限军事打击"，以迫使伊朗接受美方在核协议方面的要求。伊朗外长表示将在三天内确定与美方的协议草案。美军"福特"号航母打击群已进入地中海前往中东，与"亚伯拉罕·林肯"号形成双航母部署。</p>
+                            <p><strong>来源：</strong>央视新闻/新浪财经 | <strong>发布时间：</strong>2026-02-21</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">国内外时事</span>美国四季度GDP增长1.4%大幅低于预期</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>美国2025年第四季度实际GDP年化初值环比增长1.4%，明显低于预期的2.8%，较前值4.4%大幅放缓。政府停摆拖累GDP约1个百分点。美联储最青睐的通胀指标核心PCE在12月份同比上涨3%，高于预期。特朗普提前发声批评停摆并施压美联储降息。</p>
+                            <p><strong>来源：</strong>新浪财经/华尔街见闻 | <strong>发布时间：</strong>2026-02-21</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 扩展国际新闻 -->
+            <div class="section" id="section-international">
+                <div class="section-header" onclick="toggleSection('section-international')">
+                    <span>🌍 扩展国际新闻 (0条)</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    
+                </div>
+            </div>
+            
+            <!-- 推特Trend -->
+            <div class="section" id="section-twitter">
+                <div class="section-header" onclick="toggleSection('section-twitter')">
+                    <span>📈 推特Trend</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🇺🇸 美国 Trend</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <ul class="trend-list">
+                                <li><span class="trend-rank top">1</span>Supreme Court</li>
+<li><span class="trend-rank top">2</span>SCOTUS</li>
+<li><span class="trend-rank top">3</span>Congress</li>
+<li><span class="trend-rank">4</span>Tariffs</li>
+<li><span class="trend-rank">5</span>Finland</li>
+<li><span class="trend-rank">6</span>IEEPA</li>
+<li><span class="trend-rank">7</span>Kavanaugh</li>
+<li><span class="trend-rank">8</span>Canada</li>
+<li><span class="trend-rank">9</span>Alito</li>
+<li><span class="trend-rank">10</span>Gorsuch</li>
+<li><span class="trend-rank">11</span>MacKinnon</li>
+<li><span class="trend-rank">12</span>Roberts</li>
+<li><span class="trend-rank">13</span>McConnell</li>
+<li><span class="trend-rank">14</span>Section 122</li>
+<li><span class="trend-rank">15</span>Saros</li>
+<li><span class="trend-rank">16</span>Pence</li>
+<li><span class="trend-rank">17</span>Marchand</li>
+<li><span class="trend-rank">18</span>The Court</li>
+<li><span class="trend-rank">19</span>Plan B</li>
+<li><span class="trend-rank">20</span>FRLG</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🇯🇵 日本 Trend</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <ul class="trend-list">
+                                <li><span class="trend-rank top">1</span>#マンガポイ活はLINEマンガ</li>
+<li><span class="trend-rank top">2</span>トランプ関税</li>
+<li><span class="trend-rank top">3</span>米最高裁</li>
+<li><span class="trend-rank">4</span>高木美帆選手</li>
+<li><span class="trend-rank">5</span>追加関税</li>
+<li><span class="trend-rank">6</span>違法判決</li>
+<li><span class="trend-rank">7</span>#三四郎ANN0</li>
+<li><span class="trend-rank">8</span>高木選手</li>
+<li><span class="trend-rank">9</span>#歩け歌謡曲</li>
+<li><span class="trend-rank">10</span>最高裁の違法判断</li>
+<li><span class="trend-rank">11</span>#vibes813</li>
+<li><span class="trend-rank">12</span>#theburn847</li>
+<li><span class="trend-rank">13</span>相互関税</li>
+<li><span class="trend-rank">14</span>スピードスケート</li>
+<li><span class="trend-rank">15</span>入江伸子</li>
+<li><span class="trend-rank">16</span>巨額の返還</li>
+<li><span class="trend-rank">17</span>UOMO</li>
+<li><span class="trend-rank">18</span>IEEPA</li>
+<li><span class="trend-rank">19</span>グローバル関税</li>
+<li><span class="trend-rank">20</span>ラスト1周</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 新浪/百度热搜 -->
+            <div class="section" id="section-hotsearch">
+                <div class="section-header" onclick="toggleSection('section-hotsearch')">
+                    <span>🔥 百度热搜榜</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <ul class="trend-list">
+                        <li><span class="trend-rank top">1</span>总书记新春'典'论家国</li>
+<li><span class="trend-rank top">2</span>王心迪徐梦桃夫妻双双夺金</li>
+<li><span class="trend-rank top">3</span>"变成中国人"在中国过春节</li>
+<li><span class="trend-rank">4</span>返乡年轻人"挤爆"县城酒店</li>
+<li><span class="trend-rank">5</span>全能型强冷空气来了</li>
+<li><span class="trend-rank">6</span>火锅店春节4天赚33.9万全给员工</li>
+<li><span class="trend-rank">7</span>王心迪夺冠后回应"家庭地位"</li>
+<li><span class="trend-rank">8</span>特斯拉新车没有方向盘没有脚踏板</li>
+<li><span class="trend-rank">9</span>春节熬夜"补觉能补回来"是误区</li>
+<li><span class="trend-rank">10</span>500块压岁钱发出5万的感觉</li>
+<li><span class="trend-rank">11</span>王心迪复制徐梦桃跳上领奖台动作</li>
+<li><span class="trend-rank">12</span>小伙撕去年对联天塌了</li>
+<li><span class="trend-rank">13</span>美最高法院裁定特朗普关税违法</li>
+<li><span class="trend-rank">14</span>"桃心夫妇"48小时内接连夺金</li>
+<li><span class="trend-rank">15</span>这种瓜子有毒还致癌 吃到立马吐出来</li>
+<li><span class="trend-rank">16</span>孙子大年初一离家工作爷爷痛哭</li>
+<li><span class="trend-rank">17</span>河北女婿江西过年 全是辣椒难下筷</li>
+<li><span class="trend-rank">18</span>7名中国游客沉入贝加尔湖溺亡</li>
+<li><span class="trend-rank">19</span>王心迪夺冠后双膝跪地仰天怒吼</li>
+<li><span class="trend-rank">20</span>黄渤给岳父母拜年 妻子罕见出镜</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 游戏新闻 -->
+            <div class="section" id="section-gaming">
+                <div class="section-header" onclick="toggleSection('section-gaming')">
+                    <span>🎮 游戏新闻 (9条)</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">PC独立游戏</span><span class="tag">新作发布</span><span class="tag">合作游戏</span><span class="tag">Steam</span>Steam独立游戏新作《Roadside Research》上线</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>《Roadside Research》是一款四人合作游戏，玩家扮演外星间谍经营加油站，在执行日常零售任务的同时收集人类情报。游戏采用第一人称视角，融合了零售模拟和搞怪合作玩法，目前以抢先体验形式发布，拥有庞大的路线图和活跃社区。</p>
+                            <p><strong>来源：</strong>PC Gamer | <strong>发布时间：</strong>2026-02-13</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">PC独立游戏</span><span class="tag">新作发布</span><span class="tag">Metroidvania</span><span class="tag">像素风</span>《The Prisoning: Fletcher's Quest》发售</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>由Elden Pixels开发的短篇Metroidvania游戏《The Prisoning: Fletcher's Quest》于2月11日发售。游戏讲述一次心理咨询出错后，玩家被困在一位濒临身心崩溃的游戏开发者脑海中。游戏时长约2小时，采用随机生成地图机制，风格类似《Chasm》。</p>
+                            <p><strong>来源：</strong>PC Gamer / MonsterVine | <strong>发布时间：</strong>2026-02-11</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">PC独立游戏</span><span class="tag">新作发布</span><span class="tag">点击冒险</span><span class="tag">复古风格</span>《Shadows of the Afterland》发布</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>Aruma Studios推出的《Shadows of the Afterland》是一款90年代风格的点击冒险游戏，背景设定在1960年代的马德里及其来世版本。游戏讲述一个灵魂在过渡过程中出错，带着尚未出生的马德里女警Carolina的记忆来到来世的故事。</p>
+                            <p><strong>来源：</strong>PC Gamer | <strong>发布时间：</strong>2026-02-10</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">手游/二游</span><span class="tag">版本更新</span><span class="tag">米哈游</span><span class="tag">崩坏星穹铁道</span>《崩坏：星穹铁道》4.0版本「满月是神不在的时间」上线</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>HoYoverse旗下《崩坏：星穹铁道》于2月13日推出4.0版本更新。新版本持续至3月25日，带来全新剧情内容。更新维护从2月13日06:00开始，预计5小时完成，官方提供300星琼停服补偿。</p>
+                            <p><strong>来源：</strong>HoYoverse / 游民星空 | <strong>发布时间：</strong>2026-02-13</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">手游/二游</span><span class="tag">新游测试</span><span class="tag">腾讯</span><span class="tag">生存游戏</span>腾讯《失控进化》开启终测</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>腾讯旗下重磅新游《失控进化》于2026年2月开启最终测试。据新游前瞻报道，本月有超过28款新游上线，涵盖硬核生存、二次元开放世界等热门类型。</p>
+                            <p><strong>来源：</strong>17173 | <strong>发布时间：</strong>2026-02-03</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">手游/二游</span><span class="tag">版本更新</span><span class="tag">网易</span><span class="tag">武侠</span>网易《逆水寒》手游2026年更新前瞻</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>网易《逆水寒》手游公布2026年更新计划，包括角色建模跨代升级、货币大统一、接入Seedance等重要改动。更新将提供极致公平的竞技环境，并推出更有深度的大规模团战机制。</p>
+                            <p><strong>来源：</strong>新浪财经 | <strong>发布时间：</strong>2026-02-17</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">行业动态</span><span class="tag">财报</span><span class="tag">微软</span><span class="tag">Xbox</span>Xbox硬件收入暴跌32%，订阅服务增长停滞</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>微软最新财报显示，尽管斥资近千亿美元收购动视暴雪和ZeniMax，Xbox游戏业务总收入同比下降9%，硬件收入暴跌32%，软件收入下降5%。微软已近两年未更新Game Pass具体用户数，引发外界对订阅服务增长停滞的质疑。</p>
+                            <p><strong>来源：</strong>GamesIndustry / 新浪财经 | <strong>发布时间：</strong>2026-02-02</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">行业动态</span><span class="tag">财报</span><span class="tag">索尼</span><span class="tag">PlayStation</span>索尼上调业绩预期，游戏音乐业务表现亮眼</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>索尼发布2025财年第三季度财报，净利润同比增长11%至3773.2亿日元，远超分析师预期的3482亿日元。公司凭借游戏和音乐业务的出色表现上调全年业绩预期。</p>
+                            <p><strong>来源：</strong>新浪财经 | <strong>发布时间：</strong>2026-02-05</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title"><span class="tag">行业动态</span><span class="tag">新作发布</span><span class="tag">索尼</span><span class="tag">PlayStation</span>PlayStation State of Play发布会公布多款新作</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p>索尼2月13日举办State of Play发布会，公布多项重磅消息：《战神》横版衍生作《God of War: Sons of Sparta》当天发售、《战神》三部曲重制版开发中、全新2D《恶魔城：贝尔蒙特的诅咒》公布、Saber Interactive开发《疾速追杀》游戏等。</p>
+                            <p><strong>来源：</strong>IGN | <strong>发布时间：</strong>2026-02-13</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 每日一曲 -->
+            <div class="section" id="section-music">
+                <div class="section-header" onclick="toggleSection('section-music')">
+                    <span>🎵 每日一曲</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="music-card">
+                        <div class="music-title">モニタリング (Monitoring / 视奸)</div>
+                        <div class="music-artist">DECO*27 feat. 初音ミク</div>
+                        <div class="music-genre">Vocaloid / EDM / J-Pop</div>
+                        <div class="music-desc">
+                            这是DECO*27于2024年11月发布的最新热门单曲，收录于第9张专辑《TRANSFORM》。歌曲以极具冲击力的EDM编曲搭配初音ミク标志性的电子嗓音，讲述了一个关于"监视"与"陪伴"的复杂情感故事。MV中眼罩MIKU的形象已成为新的视觉符号，歌曲在YouTube已突破1亿播放量，B站也超过2000万播放，是近年Vocaloid界的现象级作品。DECO*27标志性的中毒性旋律与充满张力的副歌，让这首歌成为2024-2025年最不容错过的日语电子音乐之一。
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 行业英语词汇 -->
+            <div class="section" id="section-vocab">
+                <div class="section-header" onclick="toggleSection('section-vocab')">
+                    <span>📚 今日5个行业英语词汇</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="vocab-item">
+    <div class="vocab-word">monetization <span style="font-size:14px;color:#888;font-weight:normal;">/ˌmʌnɪtaɪˈzeɪʃn/</span></div>
+    <div class="vocab-meaning"><strong>货币化，变现</strong></div>
+    <div class="vocab-example">The startup is exploring new monetization strategies for its freemium mobile app.<br>这家初创公司正在为其免费增值移动应用探索新的变现策略。</div>
+</div><div class="vocab-item">
+    <div class="vocab-word">synergy <span style="font-size:14px;color:#888;font-weight:normal;">/ˈsɪnədʒi/</span></div>
+    <div class="vocab-meaning"><strong>协同效应，协同作用</strong></div>
+    <div class="vocab-example">The merger is expected to create significant cost synergies and operational efficiencies.<br>预计此次合并将产生显著的成本协同效应和运营效率提升。</div>
+</div><div class="vocab-item">
+    <div class="vocab-word">disruptive <span style="font-size:14px;color:#888;font-weight:normal;">/dɪsˈrʌptɪv/</span></div>
+    <div class="vocab-meaning"><strong>颠覆性的，破坏性的</strong></div>
+    <div class="vocab-example">AI-powered tools are proving to be highly disruptive to traditional software development workflows.<br>事实证明，人工智能驱动的工具对传统软件开发工作流程具有高度颠覆性。</div>
+</div><div class="vocab-item">
+    <div class="vocab-word">scalability <span style="font-size:14px;color:#888;font-weight:normal;">/ˌskeɪləˈbɪləti/</span></div>
+    <div class="vocab-meaning"><strong>可扩展性，可伸缩性</strong></div>
+    <div class="vocab-example">Cloud infrastructure provides the scalability needed to handle traffic spikes during peak shopping seasons.<br>云基础设施提供了处理购物旺季流量高峰所需的可扩展性。</div>
+</div><div class="vocab-item">
+    <div class="vocab-word">valuation <span style="font-size:14px;color:#888;font-weight:normal;">/ˌvæljuˈeɪʃn/</span></div>
+    <div class="vocab-meaning"><strong>估值，估价</strong></div>
+    <div class="vocab-example">The fintech unicorn achieved a $10 billion valuation in its latest funding round.<br>这家金融科技独角兽在最新一轮融资中获得了100亿美元的估值。</div>
+</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            💡 点击标题展开/收起 | 每日更新于上午9:00 (GMT+8)
+        </div>
+    </div>
+    
+    <script>
+        function toggleSection(id) {
+            const section = document.getElementById(id);
+            if (section) {
+                section.classList.toggle('active');
+            }
+        }
+        
+        function toggleItem(header) {
+            if (header) {
+                const content = header.nextElementSibling;
+                if (content) {
+                    header.classList.toggle('active');
+                    content.classList.toggle('active');
+                }
+            }
+        }
+        
+        // 确保第一个分类默认展开
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstSection = document.querySelector('.section');
+            if (firstSection) {
+                firstSection.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
