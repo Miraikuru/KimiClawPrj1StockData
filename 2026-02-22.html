@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026-02-22 每日简报</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 26px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .header .time {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        .content {
+            padding: 20px;
+        }
+        .section {
+            margin-bottom: 16px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .section-header {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+            color: white;
+            padding: 16px 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        .section-header:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+        }
+        .section-header .arrow {
+            transition: transform 0.3s;
+            font-size: 12px;
+        }
+        .section.active .section-header .arrow {
+            transform: rotate(180deg);
+        }
+        .section-content {
+            display: none;
+            padding: 16px;
+        }
+        .section.active .section-content {
+            display: block;
+        }
+        .item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin-bottom: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .item-header {
+            padding: 14px 16px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s;
+        }
+        .item-header:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+        .item-header.active {
+            background: rgba(102, 126, 234, 0.15);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .item-title {
+            font-weight: 500;
+            color: #f0f0f0;
+            font-size: 15px;
+        }
+        .item-arrow {
+            transition: transform 0.3s;
+            color: #667eea;
+            font-size: 10px;
+        }
+        .item-header.active .item-arrow {
+            transform: rotate(180deg);
+        }
+        .item-content {
+            display: none;
+            padding: 16px;
+            color: #c0c0c0;
+            line-height: 1.7;
+            font-size: 14px;
+        }
+        .item-content.active {
+            display: block;
+        }
+        .item-content p {
+            margin-bottom: 12px;
+        }
+        .item-content ul {
+            margin-left: 20px;
+            margin-bottom: 12px;
+        }
+        .item-content li {
+            margin-bottom: 6px;
+        }
+        .highlight {
+            background: linear-gradient(120deg, rgba(255, 234, 167, 0.3) 0%, rgba(255, 234, 167, 0.3) 100%);
+            background-repeat: no-repeat;
+            background-size: 100% 40%;
+            background-position: 0 88%;
+            padding: 0 4px;
+            font-weight: 600;
+            color: #ffeaa7;
+        }
+        .up {
+            color: #00b894;
+        }
+        .down {
+            color: #ff7675;
+        }
+        .tag {
+            display: inline-block;
+            background: rgba(102, 126, 234, 0.3);
+            color: #a0b0ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-right: 6px;
+        }
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .data-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .data-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 8px;
+        }
+        .data-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #fff;
+        }
+        .data-change {
+            font-size: 12px;
+            margin-top: 4px;
+        }
+        .vocab-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .vocab-word {
+            font-size: 18px;
+            font-weight: 600;
+            color: #ffeaa7;
+            margin-bottom: 8px;
+        }
+        .vocab-meaning {
+            color: #a0a0a0;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .vocab-example {
+            color: #888;
+            font-size: 13px;
+            font-style: italic;
+            border-left: 3px solid #667eea;
+            padding-left: 12px;
+        }
+        .music-card {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .music-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #fff;
+        }
+        .music-artist {
+            font-size: 14px;
+            color: #a0b0ff;
+            margin-bottom: 12px;
+        }
+        .music-genre {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+        .music-desc {
+            color: #c0c0c0;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+        .trend-list {
+            list-style: none;
+            margin: 0;
+        }
+        .trend-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+        }
+        .trend-list li:last-child {
+            border-bottom: none;
+        }
+        .trend-rank {
+            width: 28px;
+            height: 28px;
+            background: rgba(102, 126, 234, 0.3);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .trend-rank.top {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 12px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .header {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 22px;
+            }
+            .content {
+                padding: 12px;
+            }
+            .data-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <h1>📊 2026-02-22 每日简报</h1>
+            <div class="time">星期日 | 更新于 2026-02-22 08:30</div>
+        </div>
+        
+        <div class="content">
+            <!-- 汇率与贵金属 -->
+            <div class="section active" id="section-rates">
+                <div class="section-header" onclick="toggleSection('section-rates')">
+                    <span>💱 汇率与贵金属</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="data-grid">
+                        <div class="data-card">
+                            <div class="data-label">美元兑人民币</div>
+                            <div class="data-value">6.9398</div>
+                            <div class="data-change down">-0.0072 (-0.10%)</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-label">日元兑人民币</div>
+                            <div class="data-value">0.0453</div>
+                            <div class="data-change up">+0.0001 (+0.22%)</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-label">黄金(元/克)</div>
+                            <div class="data-value">1134.78</div>
+                            <div class="data-change up">+24.56 (+2.21%)</div>
+                        </div>
+                        <div class="data-card">
+                            <div class="data-label">伦敦金价(美元/盎司)</div>
+                            <div class="data-value">4889.80</div>
+                            <div class="data-change down">-215.10 (-4.21%)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 财经新闻 -->
+            <div class="section" id="section-finance">
+                <div class="section-header" onclick="toggleSection('section-finance')">
+                    <span>💼 财经新闻 (9条)</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🤖 AI领域</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p><strong>谷歌正式发布Gemini 3.1 Pro，推理性能翻倍</strong></p>
+                            <p>谷歌于2月20日正式推出升级核心模型Gemini 3.1 Pro，在ARC-AGI-2基准测试中取得77.1%的得分，推理性能是上一代3 Pro的两倍以上。该模型专为科学、工程与研究领域的复杂问题设计，将全面接入谷歌旗下消费级与开发者产品。</p>
+                            <p><span class="tag">IT之家/新浪科技</span> 2026-02-20</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>字节跳动Seedance 2.0亮相春晚，AI视频生成技术引关注</strong></p>
+                            <p>字节跳动视频生成大模型Seedance 2.0以2026年央视马年春晚为首个公开应用场景完成首秀，深度参与《贺花神》《驭风歌》《快乐小马》等节目的视觉制作。该模型支持15秒高质量多镜头音视频输出，具备双声道音频能力，可实现极致拟真的视听效果。</p>
+                            <p><span class="tag">财联社</span> 2026-02-19</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>智谱发布GLM Coding Plan致歉信并公布补偿方案</strong></p>
+                            <p>2月21日，智谱发布致歉信，承认GLM Coding Plan改版存在规则透明度不够、GLM-5灰度节奏太慢、老用户升级机制设计粗糙三个问题。公司表示目前Max用户已全面开放，受影响用户可申请退款。智谱股价近期持续大涨，市值突破3200亿港元。</p>
+                            <p><span class="tag">新浪财经</span> 2026-02-21</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">💻 软件/互联网</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p><strong>OpenAI发布GPT-5.3-Codex，最强编程智能体登场</strong></p>
+                            <p>OpenAI于2月5日发布GPT-5.3-Codex，被称为迄今为止能力最强的智能体编程模型。该模型将GPT-5.2-Codex的前沿编程性能与GPT-5.2的推理及专业知识能力整合，运行速度提升25%，在SWE-Bench Pro评测达57%。同时推出实时编程模型GPT-5.3-Codex-Spark，生成速度提升15倍。</p>
+                            <p><span class="tag">OpenAI官网</span> 2026-02-05</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>互联网大厂春节AI红包大战，总金额超45亿</strong></p>
+                            <p>2026年春节期间，互联网大厂通过数字红包为AI产品获客。腾讯元宝豪掷10亿，百度文心拿出5亿，阿里千问更祭出30亿免单补贴，总计超45亿现金红包砸向C端。用户可通过登录APP、完成AI对话等任务领取红包和抽奖机会。</p>
+                            <p><span class="tag">新华网/科创板日报</span> 2026-02-15</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>港股AI股爆发，智谱7天狂飙超250%</strong></p>
+                            <p>2月20日港股马年首个交易日，多只AI股集体上涨。智谱延续节前大涨趋势，暴涨42.72%，近7个交易日累计涨超250%，总市值突破3200亿港元；MiniMax也延续强势，收涨超14%，近7个交易日累计涨超110%，市值突破3000亿港元。</p>
+                            <p><span class="tag">新浪财经</span> 2026-02-20</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🔧 硬件/半导体</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p><strong>SIA预测2026年全球半导体销售额将首破1万亿美元</strong></p>
+                            <p>美国半导体行业协会（SIA）2月19日公布的数据显示，2025年全球半导体销售额达到7917亿美元，同比增长25.6%。SIA预计2026年全球半导体销售额将突破1万亿美元，增长率达26%。AI、物联网、6G通信、自动驾驶等新兴技术将继续推动芯片需求。</p>
+                            <p><span class="tag">EET-China/新浪财经</span> 2026-02-19</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>SK海力士称存储行业进入卖方市场，价格将持续上涨</strong></p>
+                            <p>在2月20日举行的高盛电话会上，SK海力士表示存储行业已全面进入卖方市场，受AI真实需求驱动及洁净室空间受限影响，2026年存储价格将持续上涨。公司透露目前DRAM及NAND库存仅剩约4周，HBM产能已售罄，标准型DRAM极度短缺显著提升供应商议价权。</p>
+                            <p><span class="tag">新浪财经</span> 2026-02-20</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>半导体产业链涨价潮蔓延，超20家企业发涨价函</strong></p>
+                            <p>进入2026年以来，全球半导体产业链迎来新一轮全面涨价潮。从存储芯片到MCU，从晶圆代工到封装测试，从被动元件到连接器，涨价信号此起彼伏。国科微和中微半导对MCU、Nor flash等产品涨价15%至80%，MLCC现货价格涨幅达10%-20%。</p>
+                            <p><span class="tag">国际电子商情</span> 2026-02-11</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 扩展国际新闻 -->
+            <div class="section" id="section-international">
+                <div class="section-header" onclick="toggleSection('section-international')">
+                    <span>🌍 扩展国际新闻 (9条)</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🚀 航天</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p><strong>我国成功发射可重复使用试验航天器</strong></p>
+                            <p>2月7日，我国在酒泉卫星发射中心使用长征二号F运载火箭，成功发射一型可重复使用试验航天器。这是该航天器的第三次飞行任务。试验航天器将按计划开展可重复使用技术验证，为和平利用太空提供技术支撑。分析认为此举标志着我国商业航天有望步入高频发射常态化阶段。</p>
+                            <p><span class="tag">新华社</span> 2026-02-07</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>捷龙三号遥九运载火箭一箭七星海上发射成功</strong></p>
+                            <p>2月12日，捷龙三号遥九运载火箭在山东海阳附近海域成功发射，将巴基斯坦PRSC-EO2卫星等7颗卫星送入预定轨道。本次任务是捷龙三号运载火箭第2次执行国际商业发射任务，标志着中巴航天合作进一步深化。</p>
+                            <p><span class="tag">国家航天局/北京经开区</span> 2026-02-12</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>2026年被业内期待为商业航天大年</strong></p>
+                            <p>商业航天连续两年被纳入《政府工作报告》重点任务，2025年11月国家航天局正式设立商业航天司。2026年蓝箭、天兵、星河等多款新型可回收火箭将首飞，天兵天龙三号对标猎鹰9号，商业航天正从技术探索期迈向产业爆发期。</p>
+                            <p><span class="tag">人民日报/新浪财经</span> 2026-01-27</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🛢️ 大宗商品</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p><strong>黄金、原油强势反弹，金价重回5100美元关口</strong></p>
+                            <p>受美国最高法院裁定特朗普关税违法影响，市场避险情绪升温。2月21日黄金日内涨超2%，重回5100美元/盎司上方；白银美股盘中一度大涨8%，COMEX白银期货报84.57美元，涨8.93%。分析机构认为贵金属长期上行逻辑未改。</p>
+                            <p><span class="tag">新浪财经/证券时报</span> 2026-02-21</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>央行连续增持黄金，1月末黄金储备达2307.57吨</strong></p>
+                            <p>中国人民银行2月7日更新的官方储备资产数据显示，截至2026年1月末，中国黄金储备为7419万盎司（约2307.57吨），较2025年12月末的7415万盎司（约2306.32吨）增加4万盎司，为连续第三个月增持黄金。</p>
+                            <p><span class="tag">申万宏源期货</span> 2026-02-09</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>中东局势推高原油与贵金属，地缘风险溢价回归</strong></p>
+                            <p>本周地缘政治紧张、供应担忧及韧性需求推动原油与贵金属价格上涨，抵消了工业金属因农历新年假期带来的疲软。追踪25种主要大宗商品期货表现的指数年初至今累计上涨9%，过去12个月涨幅达两位数。</p>
+                            <p><span class="tag">黄金网</span> 2026-02-20</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🌐 国际时事</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p><strong>美国最高法院裁定特朗普政府大规模关税违法</strong></p>
+                            <p>美国最高法院2月20日以6比3的投票结果裁定，美国《国际紧急经济权力法》没有授权总统征收大规模关税，特朗普政府关税政策受到重大挫折。特朗普随后表示将依据《1974年贸易法》第122条，对全球商品加征10%进口关税，为期150天。</p>
+                            <p><span class="tag">新华社</span> 2026-02-20</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>特朗普宣布将全球进口关税税率从10%提高至15%</strong></p>
+                            <p>当地时间2月21日，美国总统特朗普在社交平台发文称，将把对全球商品加征的进口关税税率从10%提高至15%。特朗普称这一决定是基于对最高法院裁决的审查，并表示将在未来几个月内确定并公布新的、在法律上允许的关税措施。</p>
+                            <p><span class="tag">央视新闻</span> 2026-02-22</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>2026年春运前20天全社会跨区域人员流动量达50.8亿人次</strong></p>
+                            <p>2026年春运过半，前20天预计全社会跨区域人员流动量达50.8亿人次，日均2.5亿人次，创下历史同期新高。2月21日全社会跨区域人员流动量预计超3.6亿人次，各地返程客流攀升，全国铁路预计发送旅客1680万人次。</p>
+                            <p><span class="tag">中国新闻网</span> 2026-02-22</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 推特Trend -->
+            <div class="section" id="section-twitter">
+                <div class="section-header" onclick="toggleSection('section-twitter')">
+                    <span>📈 推特Trend</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🇺🇸 美国 Trend</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <ul class="trend-list">
+                                <li><span class="trend-rank top">1</span><span>#UFCHouston</span></li>
+<li><span class="trend-rank top">2</span><span>Del Valle</span></li>
+<li><span class="trend-rank top">3</span><span>Arizona</span></li>
+<li><span class="trend-rank">4</span><span>Corey Day</span></li>
+<li><span class="trend-rank">5</span><span>Javonte Williams</span></li>
+<li><span class="trend-rank">6</span><span>Willie Colón</span></li>
+<li><span class="trend-rank">7</span><span>Jordan Leavitt</span></li>
+<li><span class="trend-rank">8</span><span>Dulgarian</span></li>
+<li><span class="trend-rank">9</span><span>Paperwork</span></li>
+<li><span class="trend-rank">10</span><span>Kyle Busch</span></li>
+<li><span class="trend-rank">11</span><span>Jim Snow 2.0</span></li>
+<li><span class="trend-rank">12</span><span>Vandy</span></li>
+<li><span class="trend-rank">13</span><span>Cincinnati</span></li>
+<li><span class="trend-rank">14</span><span>Kansas</span></li>
+<li><span class="trend-rank">15</span><span>Daniela</span></li>
+<li><span class="trend-rank">16</span><span>Júdice</span></li>
+<li><span class="trend-rank">17</span><span>Newcastle</span></li>
+<li><span class="trend-rank">18</span><span>Bridgeman</span></li>
+<li><span class="trend-rank">19</span><span>Billy Richmond</span></li>
+<li><span class="trend-rank">20</span><span>Ceballos</span></li>
+<li><span class="trend-rank">21</span><span>Anthony Dell'Orso</span></li>
+<li><span class="trend-rank">22</span><span>Ryan Sieg</span></li>
+<li><span class="trend-rank">23</span><span>Hocevar</span></li>
+<li><span class="trend-rank">24</span><span>Semenyo</span></li>
+<li><span class="trend-rank">25</span><span>#WoodWarrington2</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🇯🇵 日本 Trend</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <ul class="trend-list">
+                                <li><span class="trend-rank top">1</span><span>#マンガポイ活はLINEマンガ</span></li>
+<li><span class="trend-rank top">2</span><span>#サタプラ</span></li>
+<li><span class="trend-rank top">3</span><span>#スタディーJAPAN</span></li>
+<li><span class="trend-rank">4</span><span>追加関税</span></li>
+<li><span class="trend-rank">5</span><span>#旅サラダ</span></li>
+<li><span class="trend-rank">6</span><span>#シューイチ</span></li>
+<li><span class="trend-rank">7</span><span>三連休初日</span></li>
+<li><span class="trend-rank">8</span><span>トランプ氏</span></li>
+<li><span class="trend-rank">9</span><span>トランプ関税</span></li>
+<li><span class="trend-rank">10</span><span>最高裁の違法判断</span></li>
+<li><span class="trend-rank">11</span><span>米最高裁</span></li>
+<li><span class="trend-rank">12</span><span>漱石の日</span></li>
+<li><span class="trend-rank">13</span><span>松倉くん</span></li>
+<li><span class="trend-rank">14</span><span>ターボタイマー</span></li>
+<li><span class="trend-rank">15</span><span>デスティニー</span></li>
+<li><span class="trend-rank">16</span><span>まちゅドラマ</span></li>
+<li><span class="trend-rank">17</span><span>相互関税</span></li>
+<li><span class="trend-rank">18</span><span>違法判決</span></li>
+<li><span class="trend-rank">19</span><span>フルアーマーZZ</span></li>
+<li><span class="trend-rank">20</span><span>新関税10</span></li>
+<li><span class="trend-rank">21</span><span>入江伸子</span></li>
+<li><span class="trend-rank">22</span><span>勝村さん</span></li>
+<li><span class="trend-rank">23</span><span>純喜くん</span></li>
+<li><span class="trend-rank">24</span><span>国際母語デー</span></li>
+<li><span class="trend-rank">25</span><span>土曜出勤</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 新浪/百度热搜 -->
+            <div class="section" id="section-hotsearch">
+                <div class="section-header" onclick="toggleSection('section-hotsearch')">
+                    <span>🔥 百度热搜热搜榜</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <ul class="trend-list">
+                        <li><span class="trend-rank top">1</span><span>"前方无厕所、无烤肠、无茶叶蛋" <span style="color:#888;font-size:12px;">790万+ 热</span></span></li>
+<li><span class="trend-rank top">2</span><span>山东网友自驾去重庆 开了10小时弃车 <span style="color:#888;font-size:12px;">780万+ 热</span></span></li>
+<li><span class="trend-rank top">3</span><span>"赛博"中国年 <span style="color:#888;font-size:12px;">761万+</span></span></li>
+<li><span class="trend-rank">4</span><span>游客挤到悔不当初不如在家刷手机 <span style="color:#888;font-size:12px;">752万+ 新</span></span></li>
+<li><span class="trend-rank">5</span><span>"假蔡明"被送给了真蔡明 <span style="color:#888;font-size:12px;">742万+</span></span></li>
+<li><span class="trend-rank">6</span><span>景区女财神被游客追得满场跑 <span style="color:#888;font-size:12px;">733万+</span></span></li>
+<li><span class="trend-rank">7</span><span>中国有六对奥运金牌夫妇 <span style="color:#888;font-size:12px;">723万+</span></span></li>
+<li><span class="trend-rank">8</span><span>教练：苏翊鸣夺金后一直想吐 <span style="color:#888;font-size:12px;">714万+ 新</span></span></li>
+<li><span class="trend-rank">9</span><span>卫视黄金档也上竖屏短剧了 <span style="color:#888;font-size:12px;">704万+</span></span></li>
+<li><span class="trend-rank">10</span><span>哈尔滨冰雪大世界：正式闭园 <span style="color:#888;font-size:12px;">695万+</span></span></li>
+<li><span class="trend-rank">11</span><span>上海财神庙辟谣香炉起火 <span style="color:#888;font-size:12px;">685万+</span></span></li>
+<li><span class="trend-rank">12</span><span>"天下第一财神庙"被游客挤爆 <span style="color:#888;font-size:12px;">675万+ 热</span></span></li>
+<li><span class="trend-rank">13</span><span>王濛生气了：教练领队都是干啥的 <span style="color:#888;font-size:12px;">665万+</span></span></li>
+<li><span class="trend-rank">14</span><span>寒潮+暴雪+大风+沙尘暴4预警齐发 <span style="color:#888;font-size:12px;">656万+</span></span></li>
+<li><span class="trend-rank">15</span><span>为何此次沙尘影响范围这么大 <span style="color:#888;font-size:12px;">646万+</span></span></li>
+<li><span class="trend-rank">16</span><span>这种饮料混着喝会对大脑造成长期伤害 <span style="color:#888;font-size:12px;">636万+</span></span></li>
+<li><span class="trend-rank">17</span><span>接瑞士女选手事业运！44分拿银牌 <span style="color:#888;font-size:12px;">627万+</span></span></li>
+<li><span class="trend-rank">18</span><span>大同遭遇沙尘天气 游客直接被吹倒 <span style="color:#888;font-size:12px;">619万+</span></span></li>
+<li><span class="trend-rank">19</span><span>"你的老鸭汤只剩汤了" <span style="color:#888;font-size:12px;">608万+ 热</span></span></li>
+<li><span class="trend-rank">20</span><span>足协主席：中国足球要向中国冰雪学习 <span style="color:#888;font-size:12px;">599万+</span></span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 游戏新闻 -->
+            <div class="section" id="section-gaming">
+                <div class="section-header" onclick="toggleSection('section-gaming')">
+                    <span>🎮 游戏新闻 (10条)</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🖥️ PC/独立游戏</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p><strong>《喵喵的结合》销量突破100万份，收入逼近2500万美元</strong></p>
+                            <p>由《以撒的结合》核心创作者埃德蒙·麦克米伦开发的猫咪主题回合制战术肉鸽游戏《喵喵的结合》销量已突破100万份，总收入逼近2500万美元。游戏于2月10日发售首日Steam同时在线玩家数便超越《守望先锋》《战地6》等热门大作，仅用3小时就收回了全部开发成本。该作目前位列2026年Steam新游营收榜第二，仅次于《仁王3》。</p>
+                            <p><span class="tag">游民星空</span> 2026-02-18</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>《仁王3》发售两周销量破100万，系列累计销量破千万</strong></p>
+                            <p>光荣特库摩与Team Ninja于2月20日宣布，《仁王3》全球销量突破100万份，成为系列三作中最快达成该成绩的作品。同时《仁王》系列全球累计销量突破1000万套。游戏于2月6日登陆PS5与PC平台，中国玩家成为销量增长核心力量，双平台占比达48.7%。Steam在线峰值突破8.8万人，刷新光荣特库摩在该平台的历史纪录。</p>
+                            <p><span class="tag">快科技/Team Ninja官方</span> 2026-02-20</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>Steam新品节2026年2月版即将开启</strong></p>
+                            <p>Steam官方宣布2026年2月新品节将于2月23日至3月2日（PT时间）举行。玩家可免费畅玩尚未推出的游戏试用版，探索各个类型即将推出的作品，并与幕后开发者互动。新品节为独立游戏开发者提供了重要的曝光机会，是PC独立游戏领域的重要活动。</p>
+                            <p><span class="tag">Steam官方</span> 2026-02月</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">📱 手游</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p><strong>《潜水员戴夫》手游版正式上线，首发价24元</strong></p>
+                            <p>Steam好评率97%、全球销量突破千万的海洋冒险经营游戏《潜水员戴夫》手游版于2月6日正式登陆TapTap与App Store平台。手机版首发折扣24元，支持iOS、安卓、TapTap PC多端互通，Steam存档可导入手机。心动发行团队针对手机端优化了UI和操作，并增加了任务快捷传送等功能，为单机手游移植提供了新思路。</p>
+                            <p><span class="tag">机核/3DM</span> 2026-02-06</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>《鸣潮》3.1版本「赠予雪中的你」正式上线</strong></p>
+                            <p>《鸣潮》3.1版本于2月5日开启更新，推出全新角色爱弥斯，卡池流水表现强劲。版本同步上线「未署名的祝福」限时福利活动，玩家可领取1600星声及专属头像等奖励。核心活动「赠予雪中的你」于2月15日开启，持续至3月18日。</p>
+                            <p><span class="tag">游民星空/17173</span> 2026-02-05</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>《绝区零》2.6版本上线，2月17日-21日停服维护</strong></p>
+                            <p>《绝区零》2.6版本已正式上线，推出千夏等新角色。游戏于2月17日至2月21日进行全服停服维护。2.6版本包含「拓金有喜好事成邦」、「天使邀请函」等限时福利活动。根据流水数据，千夏卡池表现相对平稳。</p>
+                            <p><span class="tag">17173</span> 2026-02-09</p>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="item-header" onclick="toggleItem(this)">
+                            <span class="item-title">🏢 行业动态</span>
+                            <span class="item-arrow">▼</span>
+                        </div>
+                        <div class="item-content">
+                            <p><strong>Xbox高层重大人事变动，菲尔·斯宾塞与莎拉·邦德离职</strong></p>
+                            <p>微软游戏业务迎来巨大人事变动，Xbox掌门人菲尔·斯宾塞和总裁莎拉·邦德双双离职。品牌新负责人将由AI高管阿莎·夏尔玛接任，她曾在Meta和Instacart任职，几乎没有任何游戏行业经验。Kotaku专栏撰文称'Xbox已死'，认为这标志着Xbox从主机生态向多平台服务转型的关键节点，持续裁员、项目取消、大作移植PS5等迹象被视为品牌慢性死亡的表现。</p>
+                            <p><span class="tag">Kotaku/游民星空/快科技</span> 2026-02-20</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>育碧确认多款《刺客信条》和《孤岛惊魂》新作开发中</strong></p>
+                            <p>育碧CEO Yves Guillemot在2月21日采访中确认，公司旗下两大王牌IP将迎来多款续作。目前多个《刺客信条》项目正在开发中，涵盖单人冒险与多人联机体验；《孤岛惊魂》系列也有两个'非常有前景的项目'在推进。这两个IP现均归属育碧与腾讯合资成立的新子公司旗下。此前育碧已裁减多个工作室员工，并取消了包括《波斯王子：时之砂》重制版在内的七个开发项目。</p>
+                            <p><span class="tag">快科技/新浪科技</span> 2026-02-21</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>蓝点工作室解散内幕曝光，《战神》服务项目夭折成关键</strong></p>
+                            <p>2月20日，爆料人通过LinkedIn采访蓝点工作室前员工，透露工作室解散内幕。蓝点曾向PlayStation提出制作《战神》IP在线服务游戏计划并获批准，但项目多次延期，规模远超承受范围。在《星鸣特工》项目取消后，索尼对在线服务游戏审查更加严格，最终叫停该项目。此后蓝点提交的4个新项目均未通过，包括两款单人重制版游戏。工作室解散时规模约50-60人。</p>
+                            <p><span class="tag">新浪科技</span> 2026-02-20</p>
+                            <hr style="border-color: rgba(255,255,255,0.1); margin: 12px 0;">
+                            <p><strong>网易发布2025年财报：游戏业务营收921亿元</strong></p>
+                            <p>网易于2月11日发布2025年Q4及全年财报。全年总营收1126亿元，同比增长6.9%；归母净利润338亿元，同比增长13.8%。其中游戏及相关增值服务净收入921亿元，同比增长10.2%，收入占比超过81%。在线游戏收入896亿元，同比增长11%。丁磊在财报会中表示，AI降低了准入门槛，但也极大地改变了行业格局。</p>
+                            <p><span class="tag">腾讯新闻/艾媒网</span> 2026-02-11</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 每日一曲 -->
+            <div class="section" id="section-music">
+                <div class="section-header" onclick="toggleSection('section-music')">
+                    <span>🎵 每日一曲</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="music-card">
+                        <div class="music-title">IRIS OUT</div>
+                        <div class="music-artist">米津玄師</div>
+                        <div class="music-genre">J-POP/摇滚</div>
+                        <div class="music-desc">
+                            这是米津玄师为《剧场版 链锯人 蕾洁篇》创作的主题曲，延续了他标志性的暗黑美学风格。歌曲以激烈的吉他 riff 和充满张力的编曲，配合米津玄师独特的嗓音，完美诠释了作品的世界观。这首歌在2025年发行后迅速登顶各大音乐榜单，成为年度最热门的日语歌曲之一。
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 行业英语词汇 -->
+            <div class="section" id="section-vocab">
+                <div class="section-header" onclick="toggleSection('section-vocab')">
+                    <span>📚 今日5个行业英语词汇</span>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="section-content">
+                    <div class="vocab-item">
+    <div class="vocab-word">synergy <span style="font-size:14px;color:#888;">/ˈsɪnədʒi/</span></div>
+    <div class="vocab-meaning">协同效应；合力</div>
+    <div class="vocab-example">"The merger is expected to create significant cost synergies and operational efficiencies."<br>这次合并预计将产生显著的成本协同效应和运营效率提升。</div>
+</div><div class="vocab-item">
+    <div class="vocab-word">stakeholder <span style="font-size:14px;color:#888;">/ˈsteɪkhoʊldər/</span></div>
+    <div class="vocab-meaning">利益相关者；利害关系人</div>
+    <div class="vocab-example">"We need to consider the interests of all stakeholders before making this strategic decision."<br>在做出这项战略决策之前，我们需要考虑所有利益相关者的利益。</div>
+</div><div class="vocab-item">
+    <div class="vocab-word">disruptive <span style="font-size:14px;color:#888;">/dɪsˈrʌptɪv/</span></div>
+    <div class="vocab-meaning">颠覆性的；破坏性的</div>
+    <div class="vocab-example">"The startup introduced a disruptive innovation that transformed the entire industry."<br>这家初创公司推出了一项颠覆性创新，彻底改变了整个行业。</div>
+</div><div class="vocab-item">
+    <div class="vocab-word">scalability <span style="font-size:14px;color:#888;">/ˌskeɪləˈbɪləti/</span></div>
+    <div class="vocab-meaning">可扩展性；可伸缩性</div>
+    <div class="vocab-example">"Scalability is crucial for any tech company looking to expand into global markets."<br>对于任何希望拓展全球市场的科技公司来说，可扩展性至关重要。</div>
+</div><div class="vocab-item">
+    <div class="vocab-word">due diligence <span style="font-size:14px;color:#888;">/duː ˈdɪlɪdʒəns/</span></div>
+    <div class="vocab-meaning">尽职调查；审慎调查</div>
+    <div class="vocab-example">"The investment bank conducted thorough due diligence before approving the acquisition."<br>投资银行在批准收购之前进行了彻底的尽职调查。</div>
+</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            💡 点击标题展开/收起 | 每日更新于上午9:00 (GMT+8)
+        </div>
+    </div>
+    
+    <script>
+        function toggleSection(id) {
+            const section = document.getElementById(id);
+            if (section) {
+                section.classList.toggle('active');
+            }
+        }
+        
+        function toggleItem(header) {
+            if (header) {
+                const content = header.nextElementSibling;
+                if (content) {
+                    header.classList.toggle('active');
+                    content.classList.toggle('active');
+                }
+            }
+        }
+        
+        // 确保第一个分类默认展开
+        document.addEventListener('DOMContentLoaded', function() {
+            const firstSection = document.querySelector('.section');
+            if (firstSection) {
+                firstSection.classList.add('active');
+            }
+        });
+    </script>
+</body>
+</html>
